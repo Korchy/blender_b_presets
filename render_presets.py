@@ -32,14 +32,19 @@ class RenderPresets:
     def _get_preset_data(cls, context):
         # returns preset data
         preset_data = dict()
+        # camera
+        preset_data['camera_name'] = context.scene.camera.name
+        # attributes
+        preset_data['attributes'] = dict()
         cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_x', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_y', context=context, preset_data=preset_data)
         return preset_data
 
     @classmethod
     def _add_attribute_to_preset_data(cls, context, preset_data: dict, attribute: str):
         # add attribute data to preset dict
         attribute_instance, attribute_name = attribute.rsplit('.', maxsplit=1)
-        preset_data[attribute] = {
+        preset_data['attributes'][attribute] = {
             'instance': attribute_instance,
             'attribute': attribute_name,
             'value': getattr(eval(attribute_instance), attribute_name)

@@ -18,20 +18,33 @@ class RenderPresets:
     def load_presets_list(cls, context):
         # load presets list
         for file in cls._presets_files(context=context):
-            print(file)
+            new_preset = context.window_manager.render_presets_presets.add()
+            new_preset.name = os.path.splitext(file)[0]
+            preset_data = cls._preset_data_from_file(
+                context=context,
+                preset_file_name=file
+            )
+            if preset_data:
+                new_preset.locked = preset_data['locked']
+
 
     @classmethod
     def add_new_preset(cls, context):
         # Create new preset
         preset_file_name = cls._get_new_file_name(context=context)
-        preset_data = cls._get_preset_data(context=context)
-        with open(os.path.join(cls._presets_folder_path(context=context), preset_file_name), 'w') as preset_file:
-            json.dump(preset_data, preset_file, indent=4)
+        preset_data = cls._preset_data_from_scene(context=context)
+        with open(os.path.join(cls._presets_folder_path(context=context), preset_file_name), 'w', encoding='utf8') as preset_file:
+            json.dump(preset_data, preset_file, indent=4, ensure_ascii=False)
+        # add to list
+        new_preset = context.window_manager.render_presets_presets.add()
+        new_preset.name = os.path.splitext(preset_file_name)[0]
 
     @classmethod
-    def _get_preset_data(cls, context):
+    def _preset_data_from_scene(cls, context):
         # returns preset data
         preset_data = dict()
+        # lock
+        preset_data['locked'] = False
         # camera
         preset_data['camera_name'] = context.scene.camera.name
         # attributes
@@ -39,6 +52,20 @@ class RenderPresets:
         cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_x', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_y', context=context, preset_data=preset_data)
         return preset_data
+
+    @classmethod
+    def _preset_data_from_file(cls, context, preset_file_name):
+        # return preset data from file (saved preset)
+        preset_data = None
+        with open(os.path.join(cls._presets_folder_path(context=context), preset_file_name), 'r', encoding='utf8') as preset_file:
+            preset_data = json.load(preset_file)
+        return preset_data
+
+    @classmethod
+    def clear_presets_list(cls, context):
+        # remove all presets from the list
+        while context.window_manager.render_presets_presets:
+            context.window_manager.render_presets_presets.remove(0)
 
     @classmethod
     def _add_attribute_to_preset_data(cls, context, preset_data: dict, attribute: str):

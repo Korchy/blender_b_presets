@@ -35,6 +35,7 @@ def register():
 
 
 def unregister():
+    RenderPresets.clear_presets_list(context=bpy.context)
     del WindowManager.render_presets_active_preset
     del WindowManager.render_presets_presets
     unregister_class(RENDER_PRESETS_presets_list)

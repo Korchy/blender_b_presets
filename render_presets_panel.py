@@ -38,8 +38,15 @@ class RENDER_PRESETS_PT_panel(Panel):
 class RENDER_PRESETS_UL_presets_list(UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_property, index=0, flt_flag=0):
-        layout.prop(data=item, property='name', text='', emboss=False)
         layout.prop(data=item, property='checked', text='')
+        layout.prop(data=item, property='name', text='', emboss=False)
+        layout.prop(
+            data=item,
+            property='locked',
+            text='',
+            icon='LOCKED' if item.locked else 'UNLOCKED',
+            emboss=False
+        )
 
 
 def register():

@@ -27,14 +27,16 @@ class RenderPresets:
             if preset_data:
                 new_preset.locked = preset_data['locked']
 
-
     @classmethod
     def add_new_preset(cls, context):
         # Create new preset
         preset_file_name = cls._get_new_file_name(context=context)
         preset_data = cls._preset_data_from_scene(context=context)
-        with open(os.path.join(cls._presets_folder_path(context=context), preset_file_name), 'w', encoding='utf8') as preset_file:
-            json.dump(preset_data, preset_file, indent=4, ensure_ascii=False)
+        cls._preset_data_to_file(
+            context=context,
+            preset_file_name=preset_file_name,
+            preset_data=preset_data
+        )
         # add to list
         new_preset = context.window_manager.render_presets_presets.add()
         new_preset.name = os.path.splitext(preset_file_name)[0]
@@ -57,9 +59,19 @@ class RenderPresets:
     def _preset_data_from_file(cls, context, preset_file_name):
         # return preset data from file (saved preset)
         preset_data = None
-        with open(os.path.join(cls._presets_folder_path(context=context), preset_file_name), 'r', encoding='utf8') as preset_file:
-            preset_data = json.load(preset_file)
+        file_path = os.path.join(cls._presets_folder_path(context=context), preset_file_name)
+        if os.path.isfile(file_path):
+            with open(file=file_path, mode='r', encoding='utf8') as preset_file:
+                preset_data = json.load(preset_file)
         return preset_data
+
+    @classmethod
+    def _preset_data_to_file(cls, context, preset_file_name, preset_data):
+        # save preset data to preset file
+        file_path = os.path.join(cls._presets_folder_path(context=context), preset_file_name)
+        if os.path.isfile(file_path):
+            with open(file=file_path, mode='w', encoding='utf8') as preset_file:
+                json.dump(preset_data, preset_file, indent=4, ensure_ascii=False)
 
     @classmethod
     def clear_presets_list(cls, context):
@@ -76,6 +88,21 @@ class RenderPresets:
             'attribute': attribute_name,
             'value': getattr(eval(attribute_instance), attribute_name)
         }
+
+    @classmethod
+    def change_preset_lock(cls, context, preset_name, lock_status):
+        # changes preset lock status in its file
+        preset_data = cls._preset_data_from_file(
+            context=context,
+            preset_file_name=preset_name + '.' + cls._preset_file_ext
+        )
+        if preset_data:
+            preset_data['locked'] = lock_status
+            cls._preset_data_to_file(
+                context=context,
+                preset_file_name=preset_name + '.' + cls._preset_file_ext,
+                preset_data=preset_data
+            )
 
     @classmethod
     def _get_new_file_name(cls, context):

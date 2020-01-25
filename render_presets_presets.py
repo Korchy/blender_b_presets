@@ -20,7 +20,12 @@ class RENDER_PRESETS_presets_list(PropertyGroup):
     )
 
     locked: BoolProperty(
-        default=False
+        default=False,
+        update=lambda self, context: RenderPresets.change_preset_lock(
+            context=context,
+            preset_name=self.name,
+            lock_status=self.locked
+        )
     )
 
 

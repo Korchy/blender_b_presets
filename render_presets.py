@@ -42,6 +42,17 @@ class RenderPresets:
         new_preset.name = os.path.splitext(preset_file_name)[0]
 
     @classmethod
+    def remove_preset(cls, context, preset):
+        # Remove active preset
+        if not preset.locked:
+            # remove file
+            file_path = os.path.join(cls._presets_folder_path(context=context), preset.name + '.' + cls._preset_file_ext)
+            if os.path.isfile(path=file_path):
+                os.remove(path=file_path)
+            # remove item in list
+            context.window_manager.render_presets_presets.remove(context.window_manager.render_presets_active_preset)
+
+    @classmethod
     def _preset_data_from_scene(cls, context):
         # returns preset data
         preset_data = dict()
@@ -69,9 +80,8 @@ class RenderPresets:
     def _preset_data_to_file(cls, context, preset_file_name, preset_data):
         # save preset data to preset file
         file_path = os.path.join(cls._presets_folder_path(context=context), preset_file_name)
-        if os.path.isfile(file_path):
-            with open(file=file_path, mode='w', encoding='utf8') as preset_file:
-                json.dump(preset_data, preset_file, indent=4, ensure_ascii=False)
+        with open(file=file_path, mode='w', encoding='utf8') as preset_file:
+            json.dump(preset_data, preset_file, indent=4, ensure_ascii=False)
 
     @classmethod
     def clear_presets_list(cls, context):
@@ -92,15 +102,10 @@ class RenderPresets:
     @classmethod
     def change_preset_name(cls, context, preset_item):
         # changes preset name
-        if preset_item.locked:
-            preset_item.name = preset_item.name_old
-        else:
-            if preset_item.name_old != '':  # on initial load list renames from empty to current name - don't touch files
-                old_file_path = os.path.join(cls._presets_folder_path(context=context), preset_item.name_old + '.' + cls._preset_file_ext)
-                if os.path.isfile(old_file_path):
-                    new_file_path = os.path.join(cls._presets_folder_path(context=context), preset_item.name + '.' + cls._preset_file_ext)
-                    os.rename(old_file_path, new_file_path)
-            preset_item.name_old = preset_item.name
+        old_file_path = os.path.join(cls._presets_folder_path(context=context), preset_item.name_old + '.' + cls._preset_file_ext)
+        if os.path.isfile(old_file_path):
+            new_file_path = os.path.join(cls._presets_folder_path(context=context), preset_item.name + '.' + cls._preset_file_ext)
+            os.rename(old_file_path, new_file_path)
 
     @classmethod
     def change_preset_lock(cls, context, preset_name, lock_status):

@@ -14,7 +14,7 @@ from .render_presets import RenderPresets
 class RENDER_PRESETS_presets_list(PropertyGroup):
 
     name: StringProperty(
-        update=lambda self, context: self.on_name_update(self, context)
+        update=lambda self, context: self._on_name_update(self, context)
     )
 
     name_old: StringProperty(
@@ -35,7 +35,7 @@ class RENDER_PRESETS_presets_list(PropertyGroup):
     )
 
     @staticmethod
-    def on_name_update(self, context):
+    def _on_name_update(self, context):
         # on name changed (already changed)
         if self.name != self.name_old and self.name_old != '':
             if self.locked:

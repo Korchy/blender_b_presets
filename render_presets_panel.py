@@ -28,7 +28,7 @@ class RENDER_PRESETS_PT_panel(Panel):
         )
         row = layout.row()
         row.operator('render_presets.add_new_preset', icon='PLUS', text='Add new preset')
-        # row.operator('parametrizer.remove_parameter', icon='CANCEL', text='Remove active parameter')
+        row.operator('render_presets.remove_active_preset', icon='CANCEL', text='Remove active preset')
         # row.operator('parametrizer.modify_parameter', icon='MODIFIER_ON', text='Modify active parameter').action = 'SHOW_PANEL'
         # box = layout.box()
         # box.label(text='Options')

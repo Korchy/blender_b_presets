@@ -13,7 +13,13 @@ from .render_presets import RenderPresets
 
 class RENDER_PRESETS_presets_list(PropertyGroup):
 
-    name: StringProperty()
+    name: StringProperty(
+        update=lambda self, context: self.on_name_update(self, context)
+    )
+
+    name_old: StringProperty(
+        default=''
+    )
 
     checked: BoolProperty(
         default=False
@@ -27,6 +33,29 @@ class RENDER_PRESETS_presets_list(PropertyGroup):
             lock_status=self.locked
         )
     )
+
+    @staticmethod
+    def on_name_update(self, context):
+        # on name changed (already changed)
+        if self.name != self.name_old and self.name_old != '':
+            if self.locked:
+                self._restore_name(self, message='Can\'t modify locked preset!')
+            elif not self.name:
+                self._restore_name(self, message='Empty name!')
+            elif context.window_manager.render_presets_presets.keys().count(self.name) > 1:
+                self._restore_name(self, message='Name already existed!')
+            else:
+                RenderPresets.change_preset_name(
+                    context=context,
+                    preset_item=self
+                )
+        self.name_old = self.name
+
+    @staticmethod
+    def _restore_name(self, message=''):
+        # restore name from name_old with showing warning message
+        self.name = self.name_old
+        bpy.ops.render_presets.messagebox('INVOKE_DEFAULT', message=message)
 
 
 def register():

@@ -90,6 +90,19 @@ class RenderPresets:
         }
 
     @classmethod
+    def change_preset_name(cls, context, preset_item):
+        # changes preset name
+        if preset_item.locked:
+            preset_item.name = preset_item.name_old
+        else:
+            if preset_item.name_old != '':  # on initial load list renames from empty to current name - don't touch files
+                old_file_path = os.path.join(cls._presets_folder_path(context=context), preset_item.name_old + '.' + cls._preset_file_ext)
+                if os.path.isfile(old_file_path):
+                    new_file_path = os.path.join(cls._presets_folder_path(context=context), preset_item.name + '.' + cls._preset_file_ext)
+                    os.rename(old_file_path, new_file_path)
+            preset_item.name_old = preset_item.name
+
+    @classmethod
     def change_preset_lock(cls, context, preset_name, lock_status):
         # changes preset lock status in its file
         preset_data = cls._preset_data_from_file(

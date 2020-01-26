@@ -5,6 +5,7 @@
 #   https://github.com/Korchy/blender_render_presets
 
 from .addon import Addon
+from . import message_box
 from . import render_presets_ops
 from . import render_presets_panel
 from . import render_presets_preferences
@@ -26,6 +27,7 @@ bl_info = {
 
 def register():
     if not Addon.dev_mode():
+        message_box.register()
         render_presets_preferences.register()
         render_presets_presets.register()
         render_presets_ops.register()
@@ -40,6 +42,7 @@ def unregister():
         render_presets_ops.unregister()
         render_presets_presets.unregister()
         render_presets_preferences.unregister()
+        message_box.unregister()
 
 
 if __name__ == '__main__':

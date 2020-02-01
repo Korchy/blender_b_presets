@@ -17,15 +17,23 @@ class RenderPresets:
     @classmethod
     def load_presets_list(cls, context):
         # load presets list
+        # clear current
+        cls.clear_presets_list(context=context)
+        # load new from files
         for file in cls._presets_files(context=context):
-            new_preset = context.window_manager.render_presets_presets.add()
-            new_preset.name = os.path.splitext(file)[0]
+            preset = context.window_manager.render_presets_presets.add()
+            preset.name = os.path.splitext(file)[0]
             preset_data = cls._preset_data_from_file(
                 context=context,
                 preset_file_name=file
             )
             if preset_data:
-                new_preset.locked = preset_data['locked']
+                preset.locked = preset_data['locked']
+                preset.camera = cls._object_by_name(
+                    context=context,
+                    object_name=preset_data['camera_name']
+                )
+                preset.loaded = True
 
     @classmethod
     def add_new_preset(cls, context):
@@ -108,6 +116,22 @@ class RenderPresets:
             os.rename(old_file_path, new_file_path)
 
     @classmethod
+    def change_preset_camera(cls, context, preset_item):
+        # changes preset camera
+        if not preset_item.locked:
+            preset_data = cls._preset_data_from_file(
+                context=context,
+                preset_file_name=preset_item.name + '.' + cls._preset_file_ext
+            )
+            if preset_data:
+                preset_data['camera_name'] = preset_item.camera.name if preset_item.camera else ''
+                cls._preset_data_to_file(
+                    context=context,
+                    preset_file_name=preset_item.name + '.' + cls._preset_file_ext,
+                    preset_data=preset_data
+                )
+
+    @classmethod
     def change_preset_lock(cls, context, preset_name, lock_status):
         # changes preset lock status in its file
         preset_data = cls._preset_data_from_file(
@@ -121,6 +145,14 @@ class RenderPresets:
                 preset_file_name=preset_name + '.' + cls._preset_file_ext,
                 preset_data=preset_data
             )
+
+    @classmethod
+    def _object_by_name(cls, context, object_name):
+        # return object from scene by its name
+        obj = None
+        if object_name and object_name in context.scene.objects:
+            obj = context.scene.objects[object_name]
+        return obj
 
     @classmethod
     def _get_new_file_name(cls, context):

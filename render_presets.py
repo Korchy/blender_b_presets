@@ -62,8 +62,13 @@ class RenderPresets:
 
     @classmethod
     def scene_to_preset(cls, context, preset):
-        # Store scene settings to active preset
-        pass
+        # Store scene settings to active preset file
+        preset_data = cls._preset_data_from_scene(context=context)
+        cls._preset_data_to_file(
+            context=context,
+            preset_file_name=preset.name + '.' + cls._preset_file_ext,
+            preset_data=preset_data
+        )
 
     @classmethod
     def preset_to_scene(cls, context, preset):
@@ -77,7 +82,7 @@ class RenderPresets:
         # lock
         preset_data['locked'] = False
         # camera
-        preset_data['camera_name'] = context.scene.camera.name
+        preset_data['camera_name'] = ''
         # attributes
         preset_data['attributes'] = dict()
         cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_x', context=context, preset_data=preset_data)
@@ -142,17 +147,17 @@ class RenderPresets:
                 )
 
     @classmethod
-    def change_preset_lock(cls, context, preset_name, lock_status):
+    def change_preset_lock(cls, context, preset, lock_status):
         # changes preset lock status in its file
         preset_data = cls._preset_data_from_file(
             context=context,
-            preset_file_name=preset_name + '.' + cls._preset_file_ext
+            preset_file_name=preset.name + '.' + cls._preset_file_ext
         )
         if preset_data:
             preset_data['locked'] = lock_status
             cls._preset_data_to_file(
                 context=context,
-                preset_file_name=preset_name + '.' + cls._preset_file_ext,
+                preset_file_name=preset.name + '.' + cls._preset_file_ext,
                 preset_data=preset_data
             )
 

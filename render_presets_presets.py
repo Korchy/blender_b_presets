@@ -31,10 +31,9 @@ class RENDER_PRESETS_presets_list(PropertyGroup):
 
     locked: BoolProperty(
         default=False,
-        update=lambda self, context: RenderPresets.change_preset_lock(
-            context=context,
-            preset_name=self.name,
-            lock_status=self.locked
+        update=lambda self, context: self._on_locked_update(
+            self=self,
+            context=context
         )
     )
 
@@ -108,6 +107,15 @@ class RENDER_PRESETS_presets_list(PropertyGroup):
         # restore camera from camera_old with showing warning message
         self.camera = self.camera_old
         bpy.ops.render_presets.messagebox('INVOKE_DEFAULT', message=message)
+
+    @staticmethod
+    def _on_locked_update(self, context):
+        if self.loaded:
+            RenderPresets.change_preset_lock(
+                context=context,
+                preset=self,
+                lock_status=self.locked
+            )
 
 
 def register():

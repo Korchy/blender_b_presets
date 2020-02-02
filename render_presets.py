@@ -61,6 +61,16 @@ class RenderPresets:
             context.window_manager.render_presets_presets.remove(context.window_manager.render_presets_active_preset)
 
     @classmethod
+    def scene_to_preset(cls, context, preset):
+        # Store scene settings to active preset
+        pass
+
+    @classmethod
+    def preset_to_scene(cls, context, preset):
+        # Load scene settings from active preset
+        pass
+
+    @classmethod
     def _preset_data_from_scene(cls, context):
         # returns preset data
         preset_data = dict()

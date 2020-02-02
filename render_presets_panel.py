@@ -26,13 +26,15 @@ class RENDER_PRESETS_PT_panel(Panel):
             active_dataptr=context.window_manager,
             active_propname='render_presets_active_preset'
         )
+        col = row.column(align=True)
+        col.operator('render_presets.add_new_preset', icon='ADD', text='')
+        col.operator('render_presets.remove_active_preset', icon='REMOVE', text='')
+        col.separator()
+        col.operator('render_presets.reload_presets', icon='FILE_REFRESH', text='')
         row = layout.row()
-        row.operator('render_presets.add_new_preset', icon='PLUS', text='Add new preset')
-        row.operator('render_presets.remove_active_preset', icon='CANCEL', text='Remove active preset')
-        # row.operator('parametrizer.modify_parameter', icon='MODIFIER_ON', text='Modify active parameter').action = 'SHOW_PANEL'
-        # box = layout.box()
-        # box.label(text='Options')
-        # box.prop(context.preferences.addons[__package__].preferences, 'enable_animation', text='Enable Animation')
+        row.operator('render_presets.preset_to_scene', icon='IMPORT')
+        row.operator('render_presets.scene_to_preset', icon='EXPORT')
+        row.operator('render_presets.render_checked_presets', icon='SCENE')
 
 
 class RENDER_PRESETS_UL_presets_list(UIList):

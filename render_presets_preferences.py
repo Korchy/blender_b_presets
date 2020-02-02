@@ -19,8 +19,16 @@ class RENDER_PRESETS_preferences(AddonPreferences):
         default='i:/dev/python/blender/blender_render_presets/presets/'     # ToDo remove
     )
 
+    batch_render_output_dir: StringProperty(
+        name='Batch render output folder',
+        subtype='DIR_PATH',
+        default='//presets_output/'
+    )
+
     def draw(self, context):
-        self.layout.prop(self, 'presets_dir')
+        layout = self.layout
+        layout.prop(self, 'presets_dir')
+        layout.prop(self, 'batch_render_output_dir')
 
 
 def register():

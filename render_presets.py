@@ -40,7 +40,7 @@ class RenderPresets:
     def add_new_preset(cls, context):
         # Create new preset
         preset_file_name = cls._get_new_file_name(context=context)
-        preset_data = cls._preset_data_from_scene(context=context)
+        preset_data = cls.preset_data_from_scene(context=context)
         cls._preset_data_to_file(
             context=context,
             preset_file_name=preset_file_name,
@@ -64,7 +64,7 @@ class RenderPresets:
     @classmethod
     def scene_to_preset(cls, context, preset):
         # Store scene settings to active preset file
-        preset_data = cls._preset_data_from_scene(context=context)
+        preset_data = cls.preset_data_from_scene(context=context)
         cls._preset_data_to_file(
             context=context,
             preset_file_name=preset.name + '.' + cls._preset_file_ext,
@@ -74,7 +74,7 @@ class RenderPresets:
     @classmethod
     def preset_to_scene(cls, context, preset):
         # Load scene settings from active preset
-        cls._preset_data_to_scene(
+        cls.preset_data_to_scene(
             context=context,
             preset_data=cls._preset_data_from_file(
                 context=context,
@@ -83,7 +83,7 @@ class RenderPresets:
         )
 
     @classmethod
-    def _preset_data_from_scene(cls, context):
+    def preset_data_from_scene(cls, context):
         # returns preset data
         preset_data = dict()
         # lock
@@ -97,7 +97,7 @@ class RenderPresets:
         return preset_data
 
     @classmethod
-    def _preset_data_to_scene(cls, context, preset_data: dict):
+    def preset_data_to_scene(cls, context, preset_data: dict):
         # store preset data to scene properties
         cls._backup_scene(context=context)
         # camera
@@ -137,13 +137,13 @@ class RenderPresets:
     def _backup_scene(cls, context):
         # backup current preset data
         if not cls._scene_backup:
-            cls._scene_backup = cls._preset_data_from_scene(context=context)
+            cls._scene_backup = cls.preset_data_from_scene(context=context)
 
     @classmethod
     def restore_scene(cls, context):
         # restore scene from backup
         if cls._scene_backup:
-            cls._preset_data_to_scene(
+            cls.preset_data_to_scene(
                 context=context,
                 preset_data=cls._scene_backup
             )

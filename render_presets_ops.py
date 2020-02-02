@@ -8,6 +8,7 @@ import bpy
 from bpy.types import Operator
 from bpy.utils import register_class, unregister_class
 from .render_presets import RenderPresets
+from .render_presets_batch_render import BatchRender
 
 
 class RENDER_PRESETS_OT_add_new_preset(Operator):
@@ -109,9 +110,10 @@ class RENDER_PRESETS_OT_render_checked_presets(Operator):
 
     def execute(self, context):
         # render with checked presets
-        checked_presets = (preset for preset in context.window_manager.render_presets_presets if preset.checked)
-        for preset in checked_presets:
-            pass
+        BatchRender.batch_render_with_presets(
+            context=context,
+            presets=[preset for preset in context.window_manager.render_presets_presets if preset.checked]
+        )
         return {'FINISHED'}
 
     @classmethod

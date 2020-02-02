@@ -35,6 +35,7 @@ class RENDER_PRESETS_PT_panel(Panel):
         row.operator('render_presets.preset_to_scene', icon='IMPORT')
         row.operator('render_presets.scene_to_preset', icon='EXPORT')
         row.operator('render_presets.render_checked_presets', icon='SCENE')
+        row.operator('render_presets.restore_from_backup', icon='LOOP_BACK', text='')
 
 
 class RENDER_PRESETS_UL_presets_list(UIList):

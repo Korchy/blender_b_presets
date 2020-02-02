@@ -109,7 +109,9 @@ class RENDER_PRESETS_OT_render_checked_presets(Operator):
 
     def execute(self, context):
         # render with checked presets
-        pass
+        checked_presets = (preset for preset in context.window_manager.render_presets_presets if preset.checked)
+        for preset in checked_presets:
+            pass
         return {'FINISHED'}
 
     @classmethod
@@ -121,6 +123,20 @@ class RENDER_PRESETS_OT_render_checked_presets(Operator):
             return False
 
 
+class RENDER_PRESETS_OT_restore_from_backup(Operator):
+    bl_idname = 'render_presets.restore_from_backup'
+    bl_label = 'Restore scene'
+    bl_description = 'Render Presets: Restore scene'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        # restore scene from backup
+        RenderPresets.restore_scene(
+            context=context
+        )
+        return {'FINISHED'}
+
+
 def register():
     register_class(RENDER_PRESETS_OT_add_new_preset)
     register_class(RENDER_PRESETS_OT_remove_active_preset)
@@ -128,9 +144,11 @@ def register():
     register_class(RENDER_PRESETS_OT_preset_to_scene)
     register_class(RENDER_PRESETS_OT_scene_to_preset)
     register_class(RENDER_PRESETS_OT_render_checked_presets)
+    register_class(RENDER_PRESETS_OT_restore_from_backup)
 
 
 def unregister():
+    unregister_class(RENDER_PRESETS_OT_restore_from_backup)
     unregister_class(RENDER_PRESETS_OT_render_checked_presets)
     unregister_class(RENDER_PRESETS_OT_scene_to_preset)
     unregister_class(RENDER_PRESETS_OT_preset_to_scene)

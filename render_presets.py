@@ -140,6 +140,15 @@ class RenderPresets:
             cls._scene_backup = cls._preset_data_from_scene(context=context)
 
     @classmethod
+    def restore_scene(cls, context):
+        # restore scene from backup
+        if cls._scene_backup:
+            cls._preset_data_to_scene(
+                context=context,
+                preset_data=cls._scene_backup
+            )
+
+    @classmethod
     def clear_presets_list(cls, context):
         # remove all presets from the list
         while context.window_manager.render_presets_presets:

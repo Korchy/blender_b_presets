@@ -13,6 +13,7 @@ class RenderPresets:
     _presets_folder = 'presets'
     _preset_file_name = 'preset'
     _preset_file_ext = 'json'
+    _scene_backup = None
 
     @classmethod
     def load_presets_list(cls, context):
@@ -73,7 +74,13 @@ class RenderPresets:
     @classmethod
     def preset_to_scene(cls, context, preset):
         # Load scene settings from active preset
-        pass
+        cls._preset_data_to_scene(
+            context=context,
+            preset_data=cls._preset_data_from_file(
+                context=context,
+                preset_file_name=preset.name + '.' + cls._preset_file_ext
+            )
+        )
 
     @classmethod
     def _preset_data_from_scene(cls, context):
@@ -87,6 +94,26 @@ class RenderPresets:
         preset_data['attributes'] = dict()
         cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_x', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_y', context=context, preset_data=preset_data)
+        return preset_data
+
+    @classmethod
+    def _preset_data_to_scene(cls, context, preset_data: dict):
+        # store preset data to scene properties
+        cls._backup_scene(context=context)
+        # camera
+        if preset_data['camera_name']\
+                and preset_data['camera_name'] in context.scene.objects\
+                and context.scene.objects[preset_data['camera_name']].type == 'CAMERA':
+            context.scene.camera = cls._object_by_name(
+                context=context,
+                object_name=preset_data['camera_name']
+            )
+        # attributes
+        for attribute in preset_data['attributes']:
+            cls._set_attribute_from_preset_data(
+                context=context,
+                attribute=preset_data['attributes'][attribute]
+            )
         return preset_data
 
     @classmethod
@@ -107,6 +134,12 @@ class RenderPresets:
             json.dump(preset_data, preset_file, indent=4, ensure_ascii=False)
 
     @classmethod
+    def _backup_scene(cls, context):
+        # backup current preset data
+        if not cls._scene_backup:
+            cls._scene_backup = cls._preset_data_from_scene(context=context)
+
+    @classmethod
     def clear_presets_list(cls, context):
         # remove all presets from the list
         while context.window_manager.render_presets_presets:
@@ -115,12 +148,19 @@ class RenderPresets:
     @classmethod
     def _add_attribute_to_preset_data(cls, context, preset_data: dict, attribute: str):
         # add attribute data to preset dict
+        # context needed to eval
         attribute_instance, attribute_name = attribute.rsplit('.', maxsplit=1)
         preset_data['attributes'][attribute] = {
             'instance': attribute_instance,
             'attribute': attribute_name,
             'value': getattr(eval(attribute_instance), attribute_name)
         }
+
+    @classmethod
+    def _set_attribute_from_preset_data(cls, context, attribute):
+        # add attribute data to preset dict
+        # context needed to eval
+        setattr(eval(attribute['instance']), attribute['attribute'], attribute['value'])
 
     @classmethod
     def change_preset_name(cls, context, preset_item):

@@ -74,7 +74,8 @@ class RENDER_PRESETS_OT_scene_to_preset(Operator):
 
     @classmethod
     def poll(cls, context):
-        if 0 <= context.window_manager.render_presets_active_preset < len(context.window_manager.render_presets_presets):
+        if 0 <= context.window_manager.render_presets_active_preset < len(context.window_manager.render_presets_presets)\
+                and not context.window_manager.render_presets_presets[context.window_manager.render_presets_active_preset].locked:
             return True
         else:
             return False

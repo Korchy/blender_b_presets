@@ -6,6 +6,7 @@
 
 import json
 import os
+from .render_presets_file_system import RenderPresetsFileSystem
 
 
 class RenderPresets:
@@ -95,6 +96,75 @@ class RenderPresets:
         preset_data['camera_name'] = ''
         # attributes
         preset_data['attributes'] = dict()
+        # add here data to save to preset
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.engine', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.feature_set', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.device', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.shading_system', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.progressive', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.samples', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.preview_samples', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.seed', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.sampling_pattern', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.use_square_samples', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.min_light_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.min_transparent_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.light_sampling_threshold', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.max_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.diffuse_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.glossy_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.transparent_max_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.transmission_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.volume_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.sample_clamp_direct', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.sample_clamp_indirect', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.blur_glossy', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.caustics_reflective', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.caustics_refractive', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.volume_step_size', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.volume_max_steps', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles_curves.use_curves', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles_curves.shape', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles_curves.cull_backfacing', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles_curves.primitive', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_simplify', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_subdivision', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_child_particles', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.texture_limit', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.ao_bounces', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_simplify_smoke_highres', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_subdivision_render', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_child_particles_render', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.texture_limit_render', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.ao_bounces_render', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.use_camera_cull', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.camera_cull_margin', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.use_distance_cull', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.distance_cull_margin', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_onplay', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_view_modifier', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_shader_fx', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_blend', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_tint', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_view_fill', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_remove_lines', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_motion_blur', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.motion_blur_position', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.motion_blur_shutter', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.rolling_shutter_type', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.rolling_shutter_duration', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.film_exposure', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.pixel_filter_type', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.filter_width', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.film_transparent', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.film_transparent_glass', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.film_transparent_roughness', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.threads_mode', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.threads', context=context, preset_data=preset_data)
+
+        # perfomance - tiles = дошел до этого пункта
+
         cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_x', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_y', context=context, preset_data=preset_data)
         return preset_data
@@ -166,17 +236,19 @@ class RenderPresets:
         # add attribute data to preset dict
         # context needed to eval
         attribute_instance, attribute_name = attribute.rsplit('.', maxsplit=1)
-        preset_data['attributes'][attribute] = {
-            'instance': attribute_instance,
-            'attribute': attribute_name,
-            'value': getattr(eval(attribute_instance), attribute_name)
-        }
+        if hasattr(eval(attribute_instance), attribute_name):
+            preset_data['attributes'][attribute] = {
+                'instance': attribute_instance,
+                'attribute': attribute_name,
+                'value': getattr(eval(attribute_instance), attribute_name)
+            }
 
     @classmethod
     def _set_attribute_from_preset_data(cls, context, attribute):
         # add attribute data to preset dict
         # context needed to eval
-        setattr(eval(attribute['instance']), attribute['attribute'], attribute['value'])
+        if hasattr(eval(attribute['instance']), attribute['attribute']):
+            setattr(eval(attribute['instance']), attribute['attribute'], attribute['value'])
 
     @classmethod
     def change_preset_name(cls, context, preset_item):
@@ -247,7 +319,9 @@ class RenderPresets:
         # Return full path to presets folder
         presets_dir = None
         if context.preferences.addons[__package__].preferences.presets_dir:
-            presets_dir = context.preferences.addons[__package__].preferences.presets_dir
+            presets_dir = RenderPresetsFileSystem.abs_path(
+                path=context.preferences.addons[__package__].preferences.presets_dir
+            )
         else:
             presets_dir = os.path.join(os.path.dirname(__file__), cls._presets_folder)
         if presets_dir:

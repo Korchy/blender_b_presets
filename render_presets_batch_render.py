@@ -10,7 +10,7 @@ import tempfile
 import bpy
 from bpy.app.handlers import render_complete, render_cancel
 from .render_presets import RenderPresets
-
+from .render_presets_file_system import RenderPresetsFileSystem
 
 class BatchRender:
 
@@ -81,7 +81,7 @@ class BatchRender:
     @classmethod
     def _save_image(cls, scene):
         # save image from current render
-        dest_dir = cls._abs_path(
+        dest_dir = RenderPresetsFileSystem.abs_path(
             path=cls._context.preferences.addons[__package__].preferences.batch_render_output_dir
         )
         if dest_dir:
@@ -91,16 +91,6 @@ class BatchRender:
             file_name = cls._current_preset.name + scene.render.file_extension
             file_path = os.path.join(dest_dir, file_name)
             bpy.data.images['Render Result'].save_render(filepath=file_path)
-
-    @staticmethod
-    def _abs_path(path):
-        # returns absolute file path from path
-        if not path:
-            path = tempfile.gettempdir()
-        if path[:2] == '//':
-            return os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(bpy.data.filepath)), path[2:]))
-        else:
-            return os.path.abspath(path)
 
     @classmethod
     def clear(cls):

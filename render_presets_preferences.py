@@ -16,7 +16,7 @@ class RENDER_PRESETS_preferences(AddonPreferences):
     presets_dir: StringProperty(
         name='Presets directory',
         subtype='DIR_PATH',
-        default='i:/dev/python/blender/blender_render_presets/presets/'     # ToDo remove
+        default='//presets/'
     )
 
     batch_render_output_dir: StringProperty(

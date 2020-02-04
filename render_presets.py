@@ -102,10 +102,21 @@ class RenderPresets:
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.feature_set', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.device', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.shading_system', context=context, preset_data=preset_data)
-        # render properties - sampling
+        # render properties - sampling (cycles)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.progressive', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.samples', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.preview_samples', context=context, preset_data=preset_data)
+        # render properties - sampling (eevee)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.taa_render_samples', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.taa_samples', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_taa_reprojection', context=context, preset_data=preset_data)
+        # render properties - ambient occlusion (eevee)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_gtao', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.gtao_distance', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.gtao_factor', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.gtao_quality', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_gtao_bent_normals', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_gtao_bounce', context=context, preset_data=preset_data)
         # render properties - sampling - advanced
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.seed', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.sampling_pattern', context=context, preset_data=preset_data)
@@ -127,6 +138,16 @@ class RenderPresets:
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.blur_glossy', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.caustics_reflective', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.caustics_refractive', context=context, preset_data=preset_data)
+        # render properties - bloom (eevee)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_bloom', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_threshold', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_knee', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_radius', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_color.r', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_color.g', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_color.b', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_intensity', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_clamp', context=context, preset_data=preset_data)
         # render properties - volume
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.volume_step_size', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.cycles.volume_max_steps', context=context, preset_data=preset_data)
@@ -307,6 +328,52 @@ class RenderPresets:
         cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_font_size', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_foreground', context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_background', context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_labels', context=context, preset_data=preset_data)
+        # output properties - post processing
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_compositing', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_sequencer', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.dither_intensity', context=context, preset_data=preset_data)
+        # scene properties - units
+        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.system', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.scale_length', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.use_separate', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.system_rotation', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.length_unit', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.mass_unit', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.time_unit', context=context, preset_data=preset_data)
+        # scene properties - gravity
+        cls._add_attribute_to_preset_data(attribute='context.scene.use_gravity', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.gravity.x', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.gravity.y', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.gravity.z', context=context, preset_data=preset_data)
+        # scene properties - audio
+        cls._add_attribute_to_preset_data(attribute='context.scene.audio_volume', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.audio_distance_model', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.audio_doppler_speed', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.audio_doppler_factor', context=context, preset_data=preset_data)
+        # world properties - ambient occlusion
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.light_settings.use_ambient_occlusion', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.light_settings.ao_factor', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.light_settings.distance', context=context, preset_data=preset_data)
+        # world properties - ray visibility
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.camera', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.transmission', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.diffuse', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.scatter', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.glossy', context=context, preset_data=preset_data)
+        # world properties - setting - surface
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.sampling_method', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.sample_map_resolution', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.max_bounces', context=context, preset_data=preset_data)
+        # world properties - setting - volume
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.volume_sampling', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.volume_interpolation', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.homogeneous_volume', context=context, preset_data=preset_data)
+        # world properties - viewport display
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.color.r', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.color.g', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.world.color.b', context=context, preset_data=preset_data)
 
 
         # viewport
@@ -389,9 +456,7 @@ class RenderPresets:
                     attribute_value.append(value)
             else:
                 attribute_value = getattr(eval(attribute_instance), attribute_name)
-            preset_data['attributes'][attribute] = {
-                'value': attribute_value
-            }
+            preset_data['attributes'][attribute] = attribute_value
 
     @classmethod
     def _set_attribute_from_preset_data(cls, context, attribute_text, attribute):
@@ -399,7 +464,7 @@ class RenderPresets:
         # context needed to eval
         attribute_instance, attribute_name = attribute_text.rsplit('.', maxsplit=1)
         if hasattr(eval(attribute_instance), attribute_name):
-            setattr(eval(attribute_instance), attribute_name, attribute['value'])
+            setattr(eval(attribute_instance), attribute_name, attribute)
 
     @classmethod
     def change_preset_name(cls, context, preset_item):

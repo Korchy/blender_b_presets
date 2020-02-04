@@ -255,6 +255,58 @@ class RenderPresets:
         cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.color_mode', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.color_depth', context=context, preset_data=preset_data)
         cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.compression', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.quality', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.jpeg2k_codec', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_jpeg2k_cinema_preset', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_jpeg2k_cinema_48', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_jpeg2k_ycc', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_cineon_log', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.exr_codec', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_preview', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_zbuffer', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.tiff_codec', context=context, preset_data=preset_data)
+        # output properties - output - ffmpeg
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.format', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_bitrate', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_channels', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_codec', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_mixrate', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_volume', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.buffersize', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.codec', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.constant_rate_factor', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.ffmpeg_preset', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.format', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.gopsize', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.max_b_frames', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.maxrate', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.minrate', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.muxrate', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.packetsize', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.use_autosplit', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.use_lossless_output', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.use_max_b_frames', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.video_bitrate', context=context, preset_data=preset_data)
+        # output properties - metadata
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_date', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_time', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_render_time', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_frame', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_frame_range', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_memory', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_hostname', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_camera', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_lens', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_scene', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_marker', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_filename', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_sequencer_strip', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_strip_meta', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_note', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_note_text', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_font_size', context=context, preset_data=preset_data)
+        cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_foreground', context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
 
 
         # viewport
@@ -280,6 +332,7 @@ class RenderPresets:
         for attribute in preset_data['attributes']:
             cls._set_attribute_from_preset_data(
                 context=context,
+                attribute_text=attribute,
                 attribute=preset_data['attributes'][attribute]
             )
         return preset_data
@@ -325,23 +378,28 @@ class RenderPresets:
             context.window_manager.render_presets_presets.remove(0)
 
     @classmethod
-    def _add_attribute_to_preset_data(cls, context, preset_data: dict, attribute: str):
+    def _add_attribute_to_preset_data(cls, context, preset_data: dict, attribute: str, attribute_type: str = 'prop'):
         # add attribute data to preset dict
         # context needed to eval
         attribute_instance, attribute_name = attribute.rsplit('.', maxsplit=1)
         if hasattr(eval(attribute_instance), attribute_name):
+            if attribute_type == 'bpy_prop_array':
+                attribute_value = []
+                for value in getattr(eval(attribute_instance), attribute_name):
+                    attribute_value.append(value)
+            else:
+                attribute_value = getattr(eval(attribute_instance), attribute_name)
             preset_data['attributes'][attribute] = {
-                'instance': attribute_instance,
-                'attribute': attribute_name,
-                'value': getattr(eval(attribute_instance), attribute_name)
+                'value': attribute_value
             }
 
     @classmethod
-    def _set_attribute_from_preset_data(cls, context, attribute):
+    def _set_attribute_from_preset_data(cls, context, attribute_text, attribute):
         # add attribute data to preset dict
         # context needed to eval
-        if hasattr(eval(attribute['instance']), attribute['attribute']):
-            setattr(eval(attribute['instance']), attribute['attribute'], attribute['value'])
+        attribute_instance, attribute_name = attribute_text.rsplit('.', maxsplit=1)
+        if hasattr(eval(attribute_instance), attribute_name):
+            setattr(eval(attribute_instance), attribute_name, attribute['value'])
 
     @classmethod
     def change_preset_name(cls, context, preset_item):

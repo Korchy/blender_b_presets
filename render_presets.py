@@ -53,6 +53,7 @@ class RenderPresets:
         # add to list
         new_preset = context.window_manager.render_presets_presets.add()
         new_preset.name = os.path.splitext(preset_file_name)[0]
+        new_preset.loaded = True
 
     @classmethod
     def remove_preset(cls, context, preset):

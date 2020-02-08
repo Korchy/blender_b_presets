@@ -2,7 +2,7 @@
 # interplanety@interplanety.org
 #
 # GitHub
-#   https://github.com/Korchy/blender_render_presets
+#   https://github.com/Korchy/blender_b_presets
 
 from bpy.props import StringProperty, IntProperty, BoolProperty
 from bpy.types import Operator

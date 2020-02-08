@@ -6,7 +6,6 @@
 
 import functools
 import os
-import tempfile
 import bpy
 from bpy.app.handlers import render_complete, render_cancel
 from .render_presets import RenderPresets

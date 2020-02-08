@@ -71,12 +71,12 @@ class RenderPresets:
         # Store scene settings to active preset file
         if not preset.locked:
             preset_data = cls.preset_data_from_scene(context=context)
+            preset_data['camera_name'] = preset.camera.name if preset.camera else ''
             cls._preset_data_to_file(
                 context=context,
                 preset_file_name=preset.name + '.' + cls._preset_file_ext,
                 preset_data=preset_data
             )
-            preset.camera = None
 
     @classmethod
     def preset_to_scene(cls, context, preset):
@@ -488,11 +488,12 @@ class RenderPresets:
         # add attribute data to preset dict
         # context needed to eval
         attribute_instance, attribute_name = attribute_text.rsplit('.', maxsplit=1)
-        if hasattr(eval(attribute_instance), attribute_name):
-            try:
-                setattr(eval(attribute_instance), attribute_name, attribute)
-            except Exception as exception:
-                pass
+        try:
+            attribute_instance = eval(attribute_instance)
+            if attribute_instance and hasattr(attribute_instance, attribute_name):
+                setattr(attribute_instance, attribute_name, attribute)
+        except Exception as exception:
+            pass
 
     @classmethod
     def change_preset_name(cls, context, preset_item):

@@ -32,7 +32,6 @@ class RENDER_PRESETS_PT_panel(Panel):
         col.separator()
         col.operator('render_presets.reload_presets', icon='FILE_REFRESH', text='')
         row = layout.row()
-        row.operator('render_presets.preset_to_scene', icon='IMPORT')
         row.operator('render_presets.scene_to_preset', icon='EXPORT')
         row.operator('render_presets.render_checked_presets', icon='SCENE')
         row.operator('render_presets.restore_from_backup', icon='LOOP_BACK', text='')
@@ -43,6 +42,8 @@ class RENDER_PRESETS_UL_presets_list(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_property, index=0, flt_flag=0):
         layout.prop(data=item, property='checked', text='')
         layout.prop(data=item, property='name', text='', emboss=False)
+        layout.operator('render_presets.preset_to_scene', icon='RESTRICT_VIEW_ON', text='').preset_id = index
+        layout.separator()
         layout.prop(data=item, property='camera', text='')
         layout.prop(
             data=item,

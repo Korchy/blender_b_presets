@@ -6,6 +6,8 @@
 
 import json
 import os
+from mathutils import Vector, Color
+from bpy.types import bpy_prop_array
 from .render_presets_file_system import RenderPresetsFileSystem
 
 
@@ -96,290 +98,310 @@ class RenderPresets:
         preset_data['camera_name'] = ''
         # attributes
         preset_data['attributes'] = dict()
-        # add here data to save to preset
-        # render properties
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.engine', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.feature_set', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.device', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.shading_system', context=context, preset_data=preset_data)
-        # render properties - sampling (cycles)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.progressive', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.samples', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.preview_samples', context=context, preset_data=preset_data)
-        # render properties - sampling (eevee)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.taa_render_samples', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.taa_samples', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_taa_reprojection', context=context, preset_data=preset_data)
-        # render properties - ambient occlusion (eevee)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_gtao', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.gtao_distance', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.gtao_factor', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.gtao_quality', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_gtao_bent_normals', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_gtao_bounce', context=context, preset_data=preset_data)
-        # render properties - sampling - advanced
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.seed', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.sampling_pattern', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.use_square_samples', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.min_light_bounces', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.min_transparent_bounces', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.light_sampling_threshold', context=context, preset_data=preset_data)
-        # render properties - light path - max bounces
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.max_bounces', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.diffuse_bounces', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.glossy_bounces', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.transparent_max_bounces', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.transmission_bounces', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.volume_bounces', context=context, preset_data=preset_data)
-        # render properties - light path - clamping
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.sample_clamp_direct', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.sample_clamp_indirect', context=context, preset_data=preset_data)
-        # render properties - light path - caustics
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.blur_glossy', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.caustics_reflective', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.caustics_refractive', context=context, preset_data=preset_data)
-        # render properties - bloom (eevee)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.use_bloom', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_threshold', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_knee', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_radius', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_color.r', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_color.g', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_color.b', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_intensity', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.eevee.bloom_clamp', context=context, preset_data=preset_data)
-        # render properties - volume
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.volume_step_size', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.volume_max_steps', context=context, preset_data=preset_data)
-        # render properties - hair
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles_curves.use_curves', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles_curves.shape', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles_curves.cull_backfacing', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles_curves.primitive', context=context, preset_data=preset_data)
-        # render properties - simplify - viewport
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_simplify', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_subdivision', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_child_particles', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.texture_limit', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.ao_bounces', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_simplify_smoke_highres', context=context, preset_data=preset_data)
-        # render properties - simplify - render
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_subdivision_render', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_child_particles_render', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.texture_limit_render', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.ao_bounces_render', context=context, preset_data=preset_data)
-        # render properties - simplify - culling
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.use_camera_cull', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.camera_cull_margin', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.use_distance_cull', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.distance_cull_margin', context=context, preset_data=preset_data)
-        # render properties - simplify - grease pencil
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_onplay', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_view_modifier', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_shader_fx', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_blend', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_tint', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_view_fill', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.simplify_gpencil_remove_lines', context=context, preset_data=preset_data)
-        # render properties - motion blur
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_motion_blur', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.motion_blur_position', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.motion_blur_shutter', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.rolling_shutter_type', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.rolling_shutter_duration', context=context, preset_data=preset_data)
-        # render properties - film
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.film_exposure', context=context, preset_data=preset_data)
-        # render properties - film - pixel filter
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.pixel_filter_type', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.filter_width', context=context, preset_data=preset_data)
-        # render properties - film - transparent
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.film_transparent', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.film_transparent_glass', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.film_transparent_roughness', context=context, preset_data=preset_data)
-        # render properties - performance - threads
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.threads_mode', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.threads', context=context, preset_data=preset_data)
-        # render properties - performance - tiles
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.tile_x', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.tile_y', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.tile_order', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.use_progressive_refine', context=context, preset_data=preset_data)
-        # render properties - performance - acceleration structure
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.debug_use_spatial_splits', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.debug_use_hair_bvh', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.debug_bvh_time_steps', context=context, preset_data=preset_data)
-        # render properties - performance - final render
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_save_buffers', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_persistent_data', context=context, preset_data=preset_data)
-        # render properties - performance - viewport
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.preview_pixel_size', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.preview_start_resolution', context=context, preset_data=preset_data)
-        # render properties - bake
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_bake_multires', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.cycles.bake_type', context=context, preset_data=preset_data)
-        # render properties - bake - influence
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_pass_direct', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_pass_indirect', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_pass_diffuse', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_pass_glossy', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_pass_transmission', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_pass_subsurface', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_pass_ambient_occlusion', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_pass_emit', context=context, preset_data=preset_data)
-        # render properties - bake - selected to active
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_selected_to_active', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_cage', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.cage_extrusion', context=context, preset_data=preset_data)
-        # render properties - bake - output
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.margin', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.bake.use_clear', context=context, preset_data=preset_data)
-        # render properties - freestyle
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_freestyle', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.line_thickness_mode', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.line_thickness', context=context, preset_data=preset_data)
-        # render properties - color management
-        cls._add_attribute_to_preset_data(attribute='context.scene.display_settings.display_device', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.view_settings.view_transform', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.view_settings.look', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.view_settings.exposure', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.view_settings.gamma', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.sequencer_colorspace_settings.name', context=context, preset_data=preset_data)
-        # render properties - color management - use curves
-        cls._add_attribute_to_preset_data(attribute='context.scene.view_settings.use_curve_mapping', context=context, preset_data=preset_data)
-        # output properties - dimensions
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_x', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_y', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.resolution_percentage', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.pixel_aspect_x', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.pixel_aspect_y', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_border', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_crop_to_border', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.frame_start', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.frame_end', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.frame_step', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.fps', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.fps_base', context=context, preset_data=preset_data)
-        # output properties - dimensions - time remapping
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.frame_map_old', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.frame_map_new', context=context, preset_data=preset_data)
-        # output properties - stereoscopy
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_multiview', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.views_format', context=context, preset_data=preset_data)
-        # output properties - output
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.filepath', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_overwrite', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_file_extension', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_placeholder', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_render_cache', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.file_format', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.color_mode', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.color_depth', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.compression', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.quality', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.jpeg2k_codec', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_jpeg2k_cinema_preset', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_jpeg2k_cinema_48', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_jpeg2k_ycc', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_cineon_log', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.exr_codec', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_preview', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.use_zbuffer', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.image_settings.tiff_codec', context=context, preset_data=preset_data)
-        # output properties - output - ffmpeg
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.format', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_bitrate', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_channels', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_codec', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_mixrate', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.audio_volume', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.buffersize', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.codec', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.constant_rate_factor', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.ffmpeg_preset', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.format', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.gopsize', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.max_b_frames', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.maxrate', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.minrate', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.muxrate', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.packetsize', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.use_autosplit', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.use_lossless_output', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.use_max_b_frames', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.ffmpeg.video_bitrate', context=context, preset_data=preset_data)
-        # output properties - metadata
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_date', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_time', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_render_time', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_frame', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_frame_range', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_memory', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_hostname', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_camera', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_lens', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_scene', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_marker', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_filename', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_sequencer_strip', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_strip_meta', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_note', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_note_text', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_font_size', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_foreground', context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.stamp_background', context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_stamp_labels', context=context, preset_data=preset_data)
-        # output properties - post processing
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_compositing', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.use_sequencer', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.render.dither_intensity', context=context, preset_data=preset_data)
-        # scene properties - units
-        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.system', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.scale_length', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.use_separate', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.system_rotation', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.length_unit', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.mass_unit', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.unit_settings.time_unit', context=context, preset_data=preset_data)
-        # scene properties - gravity
-        cls._add_attribute_to_preset_data(attribute='context.scene.use_gravity', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.gravity.x', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.gravity.y', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.gravity.z', context=context, preset_data=preset_data)
-        # scene properties - audio
-        cls._add_attribute_to_preset_data(attribute='context.scene.audio_volume', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.audio_distance_model', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.audio_doppler_speed', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.audio_doppler_factor', context=context, preset_data=preset_data)
-        # world properties - ambient occlusion
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.light_settings.use_ambient_occlusion', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.light_settings.ao_factor', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.light_settings.distance', context=context, preset_data=preset_data)
-        # world properties - ray visibility
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.camera', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.transmission', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.diffuse', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.scatter', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles_visibility.glossy', context=context, preset_data=preset_data)
-        # world properties - setting - surface
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.sampling_method', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.sample_map_resolution', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.max_bounces', context=context, preset_data=preset_data)
-        # world properties - setting - volume
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.volume_sampling', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.volume_interpolation', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.cycles.homogeneous_volume', context=context, preset_data=preset_data)
-        # world properties - viewport display
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.color.r', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.color.g', context=context, preset_data=preset_data)
-        cls._add_attribute_to_preset_data(attribute='context.scene.world.color.b', context=context, preset_data=preset_data)
-
-
+        # add here data to save to the preset
+        # render
+        # context.scene
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene,
+            render_property_txt='context.scene',
+            excluded_attributes=(
+                'rna_type', 'active_clip', 'animation_data', 'background_set', 'camera', 'collection', 'cursor', 'cycles', 'cycles_curves',
+                'display', 'display_settings', 'eevee', 'frame_current_final', 'grease_pencil', 'is_evaluated', 'is_library_indirect',
+                'is_nla_tweakmode', 'keying_sets', 'keying_sets_all', 'library', 'name_full', 'node_tree', 'objects', 'original',
+                'override_library', 'preview', 'render', 'rigidbody_world', 'safe_areas', 'sequence_editor', 'sequencer_colorspace_settings',
+                'timeline_markers', 'tool_settings', 'transform_orientation_slots', 'unit_settings', 'users', 'view_layers', 'view_settings',
+                'world'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render,
+            render_property_txt='context.scene.render',
+            excluded_attributes=(
+                'rna_type', 'bake', 'ffmpeg', 'file_extension', 'has_multiple_engines', 'image_settings', 'is_movie_format',
+                'motion_blur_shutter_curve', 'stereo_views', 'use_spherical_stereo', 'views'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render.bake
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render.bake,
+            render_property_txt='context.scene.render.bake',
+            excluded_attributes=(
+                'rna_type', 'cage_object', 'image_settings', 'pass_filter'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render.ffmpeg
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render.ffmpeg,
+            render_property_txt='context.scene.render.ffmpeg',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render.image_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render.image_settings,
+            render_property_txt='context.scene.render.image_settings',
+            excluded_attributes=(
+                'rna_type', 'display_settings', 'stereo_3d_format', 'view_settings'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render.image_settings.view_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render.image_settings.view_settings,
+            render_property_txt='context.scene.render.image_settings.view_settings',
+            excluded_attributes=(
+                'rna_type', 'curve_mapping'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render.image_settings.display_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render.image_settings.display_settings,
+            render_property_txt='context.scene.render.image_settings.display_settings',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render.bake.image_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render.bake.image_settings,
+            render_property_txt='context.scene.render.bake.image_settings',
+            excluded_attributes=(
+                'rna_type', 'display_settings', 'stereo_3d_format', 'view_settings'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render.bake.image_settings.view_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render.bake.image_settings.view_settings,
+            render_property_txt='context.scene.render.bake.image_settings.view_settings',
+            excluded_attributes=(
+                'rna_type', 'curve_mapping'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.render.bake.image_settings.display_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.render.bake.image_settings.display_settings,
+            render_property_txt='context.scene.render.bake.image_settings.display_settings',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.view_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.view_settings,
+            render_property_txt='context.scene.view_settings',
+            excluded_attributes=(
+                'rna_type', 'curve_mapping'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.cycles
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.cycles,
+            render_property_txt='context.scene.cycles',
+            excluded_attributes=(
+                'rna_type', 'dicing_camera'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.cycles_curves
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.cycles_curves,
+            render_property_txt='context.scene.cycles_curves',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.display
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.display,
+            render_property_txt='context.scene.display',
+            excluded_attributes=(
+                'rna_type', 'shading'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.display.shading
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.display.shading,
+            render_property_txt='context.scene.display.shading',
+            excluded_attributes=(
+                'rna_type', 'cycles', 'selected_studio_light'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.display_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.display_settings,
+            render_property_txt='context.scene.display_settings',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.eevee
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.eevee,
+            render_property_txt='context.scene.eevee',
+            excluded_attributes=(
+                'rna_type', 'gi_cache_info'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.sequencer_colorspace_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.sequencer_colorspace_settings,
+            render_property_txt='context.scene.sequencer_colorspace_settings',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.unit_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.unit_settings,
+            render_property_txt='context.scene.unit_settings',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.world
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.world,
+            render_property_txt='context.scene.world',
+            excluded_attributes=(
+                'rna_type', 'animation_data', 'cycles', 'cycles_visibility', 'is_evaluated', 'is_library_indirect', 'library', 'light_settings',
+                'mist_settings', 'name_full', 'node_tree', 'original', 'override_library', 'preview', 'users'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.world.cycles
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.world.cycles,
+            render_property_txt='context.scene.world.cycles',
+            excluded_attributes=(
+                'rna_type', 'animation_data', 'cycles'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.world.cycles_visibility
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.world.cycles_visibility,
+            render_property_txt='context.scene.world.cycles_visibility',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.world.light_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.world.light_settings,
+            render_property_txt='context.scene.world.light_settings',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.world.mist_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.world.mist_settings,
+            render_property_txt='context.scene.world.mist_settings',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
         # viewport
-        cls._add_attribute_to_preset_data(attribute='context.space_data.shading.type', context=context, preset_data=preset_data)
-
+        # context.space_data
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.space_data,
+            render_property_txt='context.space_data',
+            excluded_attributes=(
+                'rna_type', 'camera', 'icon_from_show_object_viewport', 'local_view', 'lock_object', 'overlay', 'region_3d', 'region_quadviews',
+                'shading', 'show_region_ui', 'stereo_3d_eye', 'type'
+            ),
+            preset_data=preset_data
+        )
+        # context.space_data.overlay
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.space_data.overlay,
+            render_property_txt='context.space_data.overlay',
+            excluded_attributes=(
+                'rna_type', 'grid_scale_unit'
+            ),
+            preset_data=preset_data
+        )
+        # context.space_data.shading
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.space_data.shading,
+            render_property_txt='context.space_data.shading',
+            excluded_attributes=(
+                'rna_type', 'cycles', 'selected_studio_light'
+            ),
+            preset_data=preset_data
+        )
         return preset_data
+
+    @classmethod
+    def _add_attributes_to_preset_data(cls, context, render_property, render_property_txt, excluded_attributes, preset_data):
+        # add render property attributes to preset data
+        attributes = (attribute for attribute in dir(render_property) if
+                      not attribute.startswith('__')
+                      and not attribute.startswith('bl_')
+                      and attribute not in excluded_attributes
+                      and hasattr(render_property, attribute)
+                      and not callable(getattr(render_property, attribute))
+                      )
+        for attribute in attributes:
+            if render_property.is_property_readonly(attribute):
+                print(attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'READ_ONLY')
+            elif isinstance(getattr(render_property, attribute), bpy_prop_array):
+                cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
+            elif isinstance(getattr(render_property, attribute), (Vector, Color)):
+                cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='Vector')
+            elif not isinstance(getattr(render_property, attribute), (int, float, bool, str, set)):
+                print(attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'COMPLEX TYPE')
+            else:
+                cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data)
 
     @classmethod
     def preset_data_to_scene(cls, context, preset_data: dict):
@@ -454,6 +476,8 @@ class RenderPresets:
                 attribute_value = []
                 for value in getattr(eval(attribute_instance), attribute_name):
                     attribute_value.append(value)
+            elif attribute_type == 'Vector':
+                attribute_value = tuple(getattr(eval(attribute_instance), attribute_name))
             else:
                 attribute_value = getattr(eval(attribute_instance), attribute_name)
             preset_data['attributes'][attribute] = attribute_value
@@ -464,7 +488,10 @@ class RenderPresets:
         # context needed to eval
         attribute_instance, attribute_name = attribute_text.rsplit('.', maxsplit=1)
         if hasattr(eval(attribute_instance), attribute_name):
-            setattr(eval(attribute_instance), attribute_name, attribute)
+            try:
+                setattr(eval(attribute_instance), attribute_name, attribute)
+            except Exception as exception:
+                pass
 
     @classmethod
     def change_preset_name(cls, context, preset_item):

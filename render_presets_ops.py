@@ -5,6 +5,7 @@
 #   https://github.com/Korchy/blender_render_presets
 
 import bpy
+from bpy.props import IntProperty
 from bpy.types import Operator
 from bpy.utils import register_class, unregister_class
 from .render_presets import RenderPresets
@@ -60,9 +61,9 @@ class RENDER_PRESETS_OT_reload_presets(Operator):
 
 class RENDER_PRESETS_OT_scene_to_preset(Operator):
     bl_idname = 'render_presets.scene_to_preset'
-    bl_label = 'Scene to active'
+    bl_label = 'Save scene to active preset'
     bl_description = 'Render Presets: Save current scene settings to preset'
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'REGISTER'}
 
     def execute(self, context):
         # scene to active preset
@@ -83,12 +84,19 @@ class RENDER_PRESETS_OT_scene_to_preset(Operator):
 
 class RENDER_PRESETS_OT_preset_to_scene(Operator):
     bl_idname = 'render_presets.preset_to_scene'
-    bl_label = 'Active to scene'
+    bl_label = 'Load preset settings to scene'
     bl_description = 'Render Presets: Load settings from active preset to the scene'
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'REGISTER'}
+
+    preset_id: IntProperty(
+        default=-1
+    )
 
     def execute(self, context):
-        # active preset to scene
+        # preset to scene
+        active_preset_id = context.window_manager.render_presets_active_preset
+        if active_preset_id != self.preset_id:
+            context.window_manager.render_presets_active_preset = self.preset_id
         RenderPresets.preset_to_scene(
             context=context,
             preset=context.window_manager.render_presets_presets[context.window_manager.render_presets_active_preset]
@@ -105,7 +113,7 @@ class RENDER_PRESETS_OT_preset_to_scene(Operator):
 
 class RENDER_PRESETS_OT_render_checked_presets(Operator):
     bl_idname = 'render_presets.render_checked_presets'
-    bl_label = 'Render checked presets'
+    bl_label = 'Render with checked presets'
     bl_description = 'Render Presets: Render scene with all active presets'
     bl_options = {'REGISTER', 'UNDO'}
 

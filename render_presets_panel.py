@@ -10,10 +10,10 @@ from bpy.utils import register_class, unregister_class
 
 class RENDER_PRESETS_PT_panel(Panel):
     bl_idname = 'RENDER_PRESETS_PT_panel'
-    bl_label = 'Render Presets'
+    bl_label = 'B-Presets'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Render Presets'
+    bl_category = 'B-Presets'
 
     def draw(self, context):
         layout = self.layout

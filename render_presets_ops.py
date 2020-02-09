@@ -15,7 +15,7 @@ from .render_presets_batch_render import BatchRender
 class RENDER_PRESETS_OT_add_new_preset(Operator):
     bl_idname = 'render_presets.add_new_preset'
     bl_label = 'Add new preset'
-    bl_description = 'Render Presets: Add new preset'
+    bl_description = 'B-Presets: Add new preset'
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -27,7 +27,7 @@ class RENDER_PRESETS_OT_add_new_preset(Operator):
 class RENDER_PRESETS_OT_remove_active_preset(Operator):
     bl_idname = 'render_presets.remove_active_preset'
     bl_label = 'Remove active preset'
-    bl_description = 'Render Presets: Remove active preset'
+    bl_description = 'B-Presets: Remove active preset'
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -50,7 +50,7 @@ class RENDER_PRESETS_OT_remove_active_preset(Operator):
 class RENDER_PRESETS_OT_reload_presets(Operator):
     bl_idname = 'render_presets.reload_presets'
     bl_label = 'Reload presets'
-    bl_description = 'Render Presets: Reload presets'
+    bl_description = 'B-Presets: Reload presets'
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -62,7 +62,7 @@ class RENDER_PRESETS_OT_reload_presets(Operator):
 class RENDER_PRESETS_OT_scene_to_preset(Operator):
     bl_idname = 'render_presets.scene_to_preset'
     bl_label = 'Save scene to active preset'
-    bl_description = 'Render Presets: Save current scene settings to preset'
+    bl_description = 'B-Presets: Save current scene settings to preset'
     bl_options = {'REGISTER'}
 
     def execute(self, context):
@@ -85,7 +85,7 @@ class RENDER_PRESETS_OT_scene_to_preset(Operator):
 class RENDER_PRESETS_OT_preset_to_scene(Operator):
     bl_idname = 'render_presets.preset_to_scene'
     bl_label = 'Load preset settings to scene'
-    bl_description = 'Render Presets: Load settings from active preset to the scene'
+    bl_description = 'B-Presets: Load settings from active preset to the scene'
     bl_options = {'REGISTER'}
 
     preset_id: IntProperty(
@@ -114,7 +114,7 @@ class RENDER_PRESETS_OT_preset_to_scene(Operator):
 class RENDER_PRESETS_OT_render_checked_presets(Operator):
     bl_idname = 'render_presets.render_checked_presets'
     bl_label = 'Render with checked presets'
-    bl_description = 'Render Presets: Render scene with all active presets'
+    bl_description = 'B-Presets: Render scene with all active presets'
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -137,7 +137,7 @@ class RENDER_PRESETS_OT_render_checked_presets(Operator):
 class RENDER_PRESETS_OT_restore_from_backup(Operator):
     bl_idname = 'render_presets.restore_from_backup'
     bl_label = 'Restore scene'
-    bl_description = 'Render Presets: Restore scene'
+    bl_description = 'B-Presets: Restore scene'
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):

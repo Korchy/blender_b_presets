@@ -17,15 +17,15 @@ from .render_presets import RenderPresets
 
 
 bl_info = {
-    'name': 'render_presets',
+    'name': 'b_presets',
     'category': 'All',
     'author': 'Akimov Nikita',
     'version': (1, 0, 0),
     'blender': (2, 81, 0),
-    'location': 'N-Panel > Render Presets',
+    'location': 'N-Panel > B-Presets',
     'wiki_url': 'https://b3d.interplanety.org/en/blender-add-on-render-presets/',
     'tracker_url': 'https://b3d.interplanety.org/en/blender-add-on-render-presets/',
-    'description': 'Render Presets'
+    'description': 'B-Presets'
 }
 
 

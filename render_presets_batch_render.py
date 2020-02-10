@@ -11,6 +11,7 @@ from bpy.app.handlers import render_complete, render_cancel
 from .render_presets import RenderPresets
 from .render_presets_file_system import RenderPresetsFileSystem
 
+
 class BatchRender:
 
     _presets = None
@@ -18,6 +19,7 @@ class BatchRender:
     _context = None
     _backup = None
     _backup_camera = None
+    _render_in_progress = False
 
     @classmethod
     def batch_render_with_presets(cls, context, presets: list):
@@ -52,13 +54,17 @@ class BatchRender:
     def _render(cls):
         # execute render
         rez = {'CANCELLED'}
-        for current_area in cls._context.window_manager.windows[0].screen.areas:
-            if current_area.type == 'VIEW_3D':
-                override_area = cls._context.copy()
-                override_area['area'] = current_area
-                override_area['window'] = bpy.context.window_manager.windows[0]
-                rez = bpy.ops.render.render(override_area, 'INVOKE_DEFAULT')
-                break
+        # for current_area in cls._context.window_manager.windows[0].screen.areas:
+        #     if current_area.type == 'VIEW_3D':
+        #         override_area = cls._context.copy()
+        #         override_area['area'] = current_area
+        #         override_area['window'] = bpy.context.window_manager.windows[0]
+        #         print('INVOKE DEFAULT')
+        #         rez = bpy.ops.render.render(override_area, 'INVOKE_DEFAULT')
+        #         break
+        if not cls._render_in_progress:
+            cls._render_in_progress = True
+            rez = bpy.ops.render.render('EXEC_DEFAULT')
         if rez == {'CANCELLED'}:
             # retry with timer
             return 1.0
@@ -71,6 +77,7 @@ class BatchRender:
         cls._save_image(scene=scene)
         # render wit next preset
         cls._render_nex_preset(context=cls._context)
+        cls._render_in_progress = False
 
     @classmethod
     def _on_render_cancel(cls):
@@ -86,7 +93,6 @@ class BatchRender:
         if dest_dir:
             if not os.path.isdir(dest_dir):
                 os.mkdir(dest_dir)
-            # file_name = cls._current_preset.name + cls._context.scene.render.file_extension
             file_name = cls._current_preset.name + scene.render.file_extension
             file_path = os.path.join(dest_dir, file_name)
             bpy.data.images['Render Result'].save_render(filepath=file_path)
@@ -101,6 +107,7 @@ class BatchRender:
         )
         cls._context = None
         cls._backup = None
+        cls._render_in_progress = False
         if cls._on_render_finish in render_complete:
             render_complete.remove(cls._on_render_finish)
         if cls._on_render_cancel in render_cancel:

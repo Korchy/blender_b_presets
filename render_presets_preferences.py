@@ -16,7 +16,7 @@ class RENDER_PRESETS_preferences(AddonPreferences):
     presets_dir: StringProperty(
         name='Presets directory',
         subtype='DIR_PATH',
-        default='//presets/'
+        default=''
     )
 
     batch_render_output_dir: StringProperty(

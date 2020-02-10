@@ -113,9 +113,9 @@ class RENDER_PRESETS_OT_preset_to_scene(Operator):
 
 class RENDER_PRESETS_OT_render_checked_presets(Operator):
     bl_idname = 'render_presets.render_checked_presets'
-    bl_label = 'Render with checked presets'
-    bl_description = 'B-Presets: Render scene with all active presets'
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_label = 'Render with marked presets'
+    bl_description = 'B-Presets: Render scene with all marked presets'
+    bl_options = {'REGISTER'}
 
     def execute(self, context):
         # render with checked presets

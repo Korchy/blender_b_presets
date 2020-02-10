@@ -23,8 +23,8 @@ bl_info = {
     'version': (1, 0, 0),
     'blender': (2, 81, 0),
     'location': 'N-Panel > B-Presets',
-    'wiki_url': 'https://b3d.interplanety.org/en/blender-add-on-render-presets/',
-    'tracker_url': 'https://b3d.interplanety.org/en/blender-add-on-render-presets/',
+    'wiki_url': 'https://b3d.interplanety.org/en/blender-add-on-b-presets/',
+    'tracker_url': 'https://b3d.interplanety.org/en/blender-add-on-b-presets/',
     'description': 'B-Presets'
 }
 

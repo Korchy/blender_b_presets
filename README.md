@@ -25,11 +25,11 @@ Settings templates are saved as separate files, making them easy to backup and t
 
 Current add-on version:
 -
-1.0.0.
+1.1.0.
 
 Blender versions:
 -
-2.81
+2.82
 
 Location and call:
 -
@@ -43,6 +43,11 @@ The "Preferences" window — Add-ons — Install... — specify the downloaded a
 
 Version history:
 -
-1.0.0.
+1.1.0.
+- 2.82 updated
+- excluded the name of the Scene
+- added active view_layer settings (optional)
 
+
+1.0.0.
 - This release.

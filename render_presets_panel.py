@@ -31,6 +31,8 @@ class RENDER_PRESETS_PT_panel(Panel):
         col.operator('render_presets.remove_active_preset', icon='REMOVE', text='')
         col.separator()
         col.operator('render_presets.reload_presets', icon='FILE_REFRESH', text='')
+        col.separator()
+        col.prop(context.preferences.addons[__package__].preferences, 'use_active_view_layer', text='', icon='RENDERLAYERS', toggle=True)
         row = layout.row()
         row.operator('render_presets.scene_to_preset', icon='EXPORT')
         row.operator('render_presets.render_checked_presets', icon='SCENE')

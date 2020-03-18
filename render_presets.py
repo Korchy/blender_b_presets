@@ -7,7 +7,8 @@
 import json
 import os
 from mathutils import Vector, Color
-from bpy.types import bpy_prop_array
+from bpy.types import bpy_prop_array, CurveMapping
+from .render_presets_bl_types_conversion import BLCurveMapping
 from .render_presets_file_system import RenderPresetsFileSystem
 
 
@@ -109,7 +110,7 @@ class RenderPresets:
             excluded_attributes=(
                 'rna_type', 'active_clip', 'animation_data', 'background_set', 'camera', 'collection', 'cursor', 'cycles', 'cycles_curves',
                 'display', 'display_settings', 'eevee', 'frame_current_final', 'grease_pencil', 'is_evaluated', 'is_library_indirect',
-                'is_nla_tweakmode', 'keying_sets', 'keying_sets_all', 'library', 'name_full', 'node_tree', 'objects', 'original',
+                'is_nla_tweakmode', 'keying_sets', 'keying_sets_all', 'library', 'name', 'name_full', 'node_tree', 'objects', 'original',
                 'override_library', 'preview', 'render', 'rigidbody_world', 'safe_areas', 'sequence_editor', 'sequencer_colorspace_settings',
                 'timeline_markers', 'tool_settings', 'transform_orientation_slots', 'unit_settings', 'users', 'view_layers', 'view_settings',
                 'world'
@@ -213,7 +214,7 @@ class RenderPresets:
             render_property=context.scene.view_settings,
             render_property_txt='context.scene.view_settings',
             excluded_attributes=(
-                'rna_type', 'curve_mapping'
+                'rna_type'
             ),
             preset_data=preset_data
         )
@@ -380,6 +381,42 @@ class RenderPresets:
             ),
             preset_data=preset_data
         )
+        # optional
+        if context.preferences.addons[__package__].preferences.use_active_view_layer:
+            # active view_layer
+            # context.view_layer
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.view_layer,
+                render_property_txt='context.view_layer',
+                excluded_attributes=(
+                    'rna_type', 'active_layer_collection', 'cycles', 'depsgraph', 'eevee', 'freestyle_settings', 'layer_collection',
+                    'material_override', 'name', 'objects'
+                ),
+                preset_data=preset_data
+            )
+            # context.view_layer.cycles
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.view_layer.cycles,
+                render_property_txt='context.view_layer.cycles',
+                excluded_attributes=(
+                    'rna_type', 'aovs', 'name'
+                ),
+                preset_data=preset_data
+            )
+            # context.view_layer.eevee
+            if hasattr(context.view_layer, 'eevee'):
+                cls._add_attributes_to_preset_data(
+                    context=context,
+                    render_property=context.view_layer.eevee,
+                    render_property_txt='context.view_layer.eevee',
+                    excluded_attributes=(
+                        'rna_type'
+                    ),
+                    preset_data=preset_data
+                )
+        # result
         return preset_data
 
     @classmethod
@@ -393,7 +430,9 @@ class RenderPresets:
                       and not callable(getattr(render_property, attribute))
                       )
         for attribute in attributes:
-            if render_property.is_property_readonly(attribute):
+            if isinstance(getattr(render_property, attribute), CurveMapping):
+                cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='CurveMapping')
+            elif render_property.is_property_readonly(attribute):
                 print(attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'READ_ONLY')
             elif isinstance(getattr(render_property, attribute), bpy_prop_array):
                 cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
@@ -479,21 +518,34 @@ class RenderPresets:
                     attribute_value.append(value)
             elif attribute_type == 'Vector':
                 attribute_value = tuple(getattr(eval(attribute_instance), attribute_name))
+            elif attribute_type == 'CurveMapping':
+                attribute_value = BLCurveMapping.to_json(instance=getattr(eval(attribute_instance), attribute_name))
             else:
                 attribute_value = getattr(eval(attribute_instance), attribute_name)
             preset_data['attributes'][attribute] = attribute_value
 
     @classmethod
     def _set_attribute_from_preset_data(cls, context, attribute_text, attribute):
-        # add attribute data to preset dict
+        # load attribute data from preset dict
         # context needed to eval
         attribute_instance, attribute_name = attribute_text.rsplit('.', maxsplit=1)
         try:
             attribute_instance = eval(attribute_instance)
             if attribute_instance and hasattr(attribute_instance, attribute_name):
-                setattr(attribute_instance, attribute_name, attribute)
+                if isinstance(attribute, dict) and 'class' in attribute:
+                    # complex attribute
+                    if attribute['class'] == 'CurveMapping':
+                        BLCurveMapping.from_json(
+                            instance=eval(attribute_text),
+                            json=attribute
+                        )
+                    else:
+                        print('ERR: unknown complex attribute')
+                else:
+                    # simple attribute
+                    setattr(attribute_instance, attribute_name, attribute)
         except Exception as exception:
-            pass
+            print('ERR: ', exception)
 
     @classmethod
     def change_preset_name(cls, context, preset_item):

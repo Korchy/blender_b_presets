@@ -5,7 +5,7 @@
 #   https://github.com/Korchy/blender_b_presets
 
 from bpy.types import AddonPreferences
-from bpy.props import StringProperty
+from bpy.props import StringProperty, BoolProperty
 from bpy.utils import register_class, unregister_class
 
 
@@ -25,10 +25,18 @@ class RENDER_PRESETS_preferences(AddonPreferences):
         default='//presets_output/'
     )
 
+    use_active_view_layer: BoolProperty(
+        default=True,
+        name='Save active view layer settings'
+    )
+
     def draw(self, context):
         layout = self.layout
         layout.prop(self, 'presets_dir')
         layout.prop(self, 'batch_render_output_dir')
+        layout.label(text='Addition properties:')
+        row = layout.row()
+        row.prop(self, 'use_active_view_layer', toggle=True)
 
 
 def register():

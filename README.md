@@ -47,6 +47,7 @@ Version history:
 - 2.82 updated
 - excluded the name of the Scene
 - added active view_layer settings (optional)
+- added saving curves from Color management
 
 
 1.0.0.

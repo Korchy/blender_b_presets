@@ -607,7 +607,7 @@ class RenderPresets:
     @classmethod
     def _presets_files(cls, context):
         # generator to get preset files in presets folder
-        for file in os.listdir(cls._presets_folder_path(context=context)):
+        for file in sorted(os.listdir(cls._presets_folder_path(context=context))):
             if os.path.isfile(os.path.join(cls._presets_folder_path(context=context), file)) and file.endswith('.' + cls._preset_file_ext):
                 yield file
 

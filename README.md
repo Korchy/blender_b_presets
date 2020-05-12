@@ -25,7 +25,7 @@ Settings templates are saved as separate files, making them easy to backup and t
 
 Current add-on version:
 -
-1.1.0.
+1.1.1.
 
 Blender versions:
 -
@@ -43,6 +43,9 @@ The "Preferences" window — Add-ons — Install... — specify the downloaded a
 
 Version history:
 -
+1.1.1.
+- presets sorted alphabetically on load
+
 1.1.0.
 - 2.82 updated
 - excluded the name of the Scene

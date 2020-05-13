@@ -25,7 +25,7 @@ Settings templates are saved as separate files, making them easy to backup and t
 
 Current add-on version:
 -
-1.1.1.
+1.1.2.
 
 Blender versions:
 -

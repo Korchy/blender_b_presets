@@ -109,7 +109,7 @@ class RenderPresets:
             render_property_txt='context.scene',
             excluded_attributes=(
                 'rna_type', 'active_clip', 'animation_data', 'background_set', 'camera', 'collection', 'cursor', 'cycles', 'cycles_curves',
-                'display', 'display_settings', 'eevee', 'frame_current_final', 'grease_pencil', 'is_evaluated', 'is_library_indirect',
+                'display', 'display_settings', 'eevee', 'frame_current_final', 'grease_pencil', 'is_embedded_data', 'is_evaluated', 'is_library_indirect',
                 'is_nla_tweakmode', 'keying_sets', 'keying_sets_all', 'library', 'name', 'name_full', 'node_tree', 'objects', 'original',
                 'override_library', 'preview', 'render', 'rigidbody_world', 'safe_areas', 'sequence_editor', 'sequencer_colorspace_settings',
                 'timeline_markers', 'tool_settings', 'transform_orientation_slots', 'unit_settings', 'users', 'view_layers', 'view_settings',
@@ -304,8 +304,8 @@ class RenderPresets:
             render_property=context.scene.world,
             render_property_txt='context.scene.world',
             excluded_attributes=(
-                'rna_type', 'animation_data', 'cycles', 'cycles_visibility', 'is_evaluated', 'is_library_indirect', 'library', 'light_settings',
-                'mist_settings', 'name_full', 'node_tree', 'original', 'override_library', 'preview', 'users'
+                'rna_type', 'animation_data', 'cycles', 'cycles_visibility', 'is_embedded_data', 'is_evaluated', 'is_library_indirect',
+                'library', 'light_settings', 'mist_settings', 'name_full', 'node_tree', 'original', 'override_library', 'preview', 'users'
             ),
             preset_data=preset_data
         )
@@ -433,7 +433,7 @@ class RenderPresets:
             if isinstance(getattr(render_property, attribute), CurveMapping):
                 cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='CurveMapping')
             elif render_property.is_property_readonly(attribute):
-                print(attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'READ_ONLY')
+                print(render_property, attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'READ_ONLY')
             elif isinstance(getattr(render_property, attribute), bpy_prop_array):
                 cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
             elif isinstance(getattr(render_property, attribute), (Vector, Color)):
@@ -458,6 +458,15 @@ class RenderPresets:
         else:
             context.scene.camera = cls._camera_backup
         # attributes
+        # preordered attributes (mast be loaded first because some other attributes depends on them)
+        #       (try to find better solution than preload them manually)
+        if 'context.scene.render.image_settings.file_format' in preset_data['attributes']:
+            cls._set_attribute_from_preset_data(
+                context=context,
+                attribute_text='context.scene.render.image_settings.file_format',
+                attribute=preset_data['attributes']['context.scene.render.image_settings.file_format']
+            )
+        # all other attributes
         for attribute in preset_data['attributes']:
             cls._set_attribute_from_preset_data(
                 context=context,

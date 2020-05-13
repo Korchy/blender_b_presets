@@ -43,6 +43,9 @@ The "Preferences" window — Add-ons — Install... — specify the downloaded a
 
 Version history:
 -
+1.1.2.
+- fixed some bugs
+
 1.1.1.
 - presets sorted alphabetically on load
 

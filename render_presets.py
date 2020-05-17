@@ -460,19 +460,22 @@ class RenderPresets:
         # attributes
         # preordered attributes (mast be loaded first because some other attributes depends on them)
         #       (try to find better solution than preload them manually)
-        if 'context.scene.render.image_settings.file_format' in preset_data['attributes']:
-            cls._set_attribute_from_preset_data(
-                context=context,
-                attribute_text='context.scene.render.image_settings.file_format',
-                attribute=preset_data['attributes']['context.scene.render.image_settings.file_format']
-            )
+        preordered_attributes = ['context.scene.render.image_settings.file_format']
+        for attribute in preordered_attributes:
+            if attribute in preset_data['attributes']:
+                cls._set_attribute_from_preset_data(
+                    context=context,
+                    attribute_text=attribute,
+                    attribute=preset_data['attributes'][attribute]
+                )
         # all other attributes
         for attribute in preset_data['attributes']:
-            cls._set_attribute_from_preset_data(
-                context=context,
-                attribute_text=attribute,
-                attribute=preset_data['attributes'][attribute]
-            )
+            if attribute not in preordered_attributes:
+                cls._set_attribute_from_preset_data(
+                    context=context,
+                    attribute_text=attribute,
+                    attribute=preset_data['attributes'][attribute]
+                )
         return preset_data
 
     @classmethod

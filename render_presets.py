@@ -109,7 +109,8 @@ class RenderPresets:
             render_property_txt='context.scene',
             excluded_attributes=(
                 'rna_type', 'active_clip', 'animation_data', 'background_set', 'camera', 'collection', 'cursor', 'cycles', 'cycles_curves',
-                'display', 'display_settings', 'eevee', 'frame_current_final', 'grease_pencil', 'is_embedded_data', 'is_evaluated', 'is_library_indirect',
+                'display', 'display_settings', 'eevee', 'frame_current_final', 'grease_pencil', 'grease_pencil_settings', 'is_embedded_data',
+                'is_evaluated', 'is_library_indirect',
                 'is_nla_tweakmode', 'keying_sets', 'keying_sets_all', 'library', 'name', 'name_full', 'node_tree', 'objects', 'original',
                 'override_library', 'preview', 'render', 'rigidbody_world', 'safe_areas', 'sequence_editor', 'sequencer_colorspace_settings',
                 'timeline_markers', 'tool_settings', 'transform_orientation_slots', 'unit_settings', 'users', 'view_layers', 'view_settings',
@@ -349,6 +350,16 @@ class RenderPresets:
             ),
             preset_data=preset_data
         )
+        # context.scene.grease_pencil_settings
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.grease_pencil_settings,
+            render_property_txt='context.scene.grease_pencil_settings',
+            excluded_attributes=(
+                'rna_type'
+            ),
+            preset_data=preset_data
+        )
         # viewport
         # context.space_data
         cls._add_attributes_to_preset_data(
@@ -430,18 +441,21 @@ class RenderPresets:
                       and not callable(getattr(render_property, attribute))
                       )
         for attribute in attributes:
-            if isinstance(getattr(render_property, attribute), CurveMapping):
-                cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='CurveMapping')
-            elif render_property.is_property_readonly(attribute):
-                print(render_property, attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'READ_ONLY')
-            elif isinstance(getattr(render_property, attribute), bpy_prop_array):
-                cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
-            elif isinstance(getattr(render_property, attribute), (Vector, Color)):
-                cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='Vector')
-            elif not isinstance(getattr(render_property, attribute), (int, float, bool, str, set)):
-                print(attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'COMPLEX TYPE')
-            else:
-                cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data)
+            try:
+                if isinstance(getattr(render_property, attribute), CurveMapping):
+                    cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='CurveMapping')
+                elif render_property.is_property_readonly(attribute):
+                    print(render_property, attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'READ_ONLY')
+                elif isinstance(getattr(render_property, attribute), bpy_prop_array):
+                    cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
+                elif isinstance(getattr(render_property, attribute), (Vector, Color)):
+                    cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='Vector')
+                elif not isinstance(getattr(render_property, attribute), (int, float, bool, str, set)):
+                    print(attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'COMPLEX TYPE')
+                else:
+                    cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data)
+            except Exception as exception:
+                print('ERR: ', exception)
 
     @classmethod
     def preset_data_to_scene(cls, context, preset_data: dict):
@@ -558,6 +572,7 @@ class RenderPresets:
                     setattr(attribute_instance, attribute_name, attribute)
         except Exception as exception:
             print('ERR: ', exception)
+            # print('\t ', 'attribute = ', attribute, ', attribute_text = ', attribute_text, ', attribute_instance = ', attribute_instance)
 
     @classmethod
     def change_preset_name(cls, context, preset_item):

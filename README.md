@@ -25,11 +25,11 @@ Settings templates are saved as separate files, making them easy to backup and t
 
 Current add-on version:
 -
-1.1.2.
+1.1.3.
 
 Blender versions:
 -
-2.82
+2.83
 
 Location and call:
 -
@@ -43,6 +43,9 @@ The "Preferences" window — Add-ons — Install... — specify the downloaded a
 
 Version history:
 -
+1.1.3.
+- fixed some bugs
+
 1.1.2.
 - fixed some bugs
 

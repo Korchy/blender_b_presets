@@ -7,7 +7,7 @@
 import json
 import os
 from mathutils import Vector, Color
-from bpy.types import bpy_prop_array, CurveMapping
+from bpy.types import bpy_prop_array, CurveMapping, EnumProperty
 from .render_presets_bl_types_conversion import BLCurveMapping
 from .render_presets_file_system import RenderPresetsFileSystem
 
@@ -157,7 +157,10 @@ class RenderPresets:
             excluded_attributes=(
                 'rna_type', 'display_settings', 'stereo_3d_format', 'view_settings'
             ),
-            preset_data=preset_data
+            preset_data=preset_data,
+            first_attributes=[
+                'file_format'
+            ]
         )
         # context.scene.render.image_settings.view_settings
         cls._add_attributes_to_preset_data(
@@ -257,7 +260,10 @@ class RenderPresets:
             excluded_attributes=(
                 'rna_type', 'cycles', 'selected_studio_light'
             ),
-            preset_data=preset_data
+            preset_data=preset_data,
+            first_attributes=[
+                'type'
+            ]
         )
         # context.scene.display_settings
         cls._add_attributes_to_preset_data(
@@ -390,7 +396,10 @@ class RenderPresets:
             excluded_attributes=(
                 'rna_type', 'cycles', 'selected_studio_light'
             ),
-            preset_data=preset_data
+            preset_data=preset_data,
+            first_attributes=[
+                'type', 'background_type'
+            ]
         )
         # optional
         if context.preferences.addons[__package__].preferences.use_active_view_layer:
@@ -431,15 +440,29 @@ class RenderPresets:
         return preset_data
 
     @classmethod
-    def _add_attributes_to_preset_data(cls, context, render_property, render_property_txt, excluded_attributes, preset_data):
+    def _add_attributes_to_preset_data(cls, context, render_property, render_property_txt, excluded_attributes, preset_data, first_attributes=None):
         # add render property attributes to preset data
-        attributes = (attribute for attribute in dir(render_property) if
-                      not attribute.startswith('__')
-                      and not attribute.startswith('bl_')
-                      and attribute not in excluded_attributes
-                      and hasattr(render_property, attribute)
-                      and not callable(getattr(render_property, attribute))
-                      )
+        first_attributes = [] if first_attributes is None else first_attributes
+        # some attributes need to be processed first because other attributes depends on them
+        attributes_to_process_first = [
+            attribute for attribute in first_attributes if
+            not attribute.startswith('__')
+            and not attribute.startswith('bl_')
+            and attribute not in excluded_attributes
+            and hasattr(render_property, attribute)
+            and not callable(getattr(render_property, attribute))
+        ]
+        # all other attributes
+        attributes_to_process_next = [
+            attribute for attribute in dir(render_property) if
+            not attribute.startswith('__')
+            and not attribute.startswith('bl_')
+            and attribute not in excluded_attributes
+            and attribute not in first_attributes
+            and hasattr(render_property, attribute)
+            and not callable(getattr(render_property, attribute))
+        ]
+        attributes = attributes_to_process_first + attributes_to_process_next
         for attribute in attributes:
             try:
                 if isinstance(getattr(render_property, attribute), CurveMapping):
@@ -450,6 +473,9 @@ class RenderPresets:
                     cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
                 elif isinstance(getattr(render_property, attribute), (Vector, Color)):
                     cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='Vector')
+                # elif isinstance(getattr(render_property, attribute), set):
+                #     print('set: ', attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'SET')
+                #     cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='set')
                 elif not isinstance(getattr(render_property, attribute), (int, float, bool, str, set)):
                     print(attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'COMPLEX TYPE')
                 else:
@@ -473,8 +499,10 @@ class RenderPresets:
             context.scene.camera = cls._camera_backup
         # attributes
         # preordered attributes (mast be loaded first because some other attributes depends on them)
-        #       (try to find better solution than preload them manually)
-        preordered_attributes = ['context.scene.render.image_settings.file_format']
+        # globally first - this attributes influence on attributes from other data sections (image_settings.file_format - ffmpeg section)
+        preordered_attributes = [
+            'context.scene.render.image_settings.file_format'
+        ]
         for attribute in preordered_attributes:
             if attribute in preset_data['attributes']:
                 cls._set_attribute_from_preset_data(
@@ -507,7 +535,7 @@ class RenderPresets:
         # save preset data to preset file
         file_path = os.path.join(cls._presets_folder_path(context=context), preset_file_name)
         with open(file=file_path, mode='w', encoding='utf8') as preset_file:
-            json.dump(preset_data, preset_file, indent=4, ensure_ascii=False)
+            json.dump(preset_data, preset_file, indent=4, ensure_ascii=False, sort_keys=False)
 
     @classmethod
     def _backup_scene(cls, context):
@@ -569,7 +597,14 @@ class RenderPresets:
                         print('ERR: unknown complex attribute')
                 else:
                     # simple attribute
-                    setattr(attribute_instance, attribute_name, attribute)
+                    # if enum - check existing in the property enum-list (ex: error if try to set '' to studio_light enum property, but get '' from studio_light in wireframe mode)
+                    if hasattr(attribute_instance, 'bl_rna') \
+                            and isinstance(attribute_instance.bl_rna.properties[attribute_name], EnumProperty):
+                        enums = [item.identifier for item in attribute_instance.bl_rna.properties[attribute_name].enum_items]
+                        if attribute in enums:
+                            setattr(attribute_instance, attribute_name, attribute)
+                    else:
+                        setattr(attribute_instance, attribute_name, attribute)
         except Exception as exception:
             print('ERR: ', exception)
             # print('\t ', 'attribute = ', attribute, ', attribute_text = ', attribute_text, ', attribute_instance = ', attribute_instance)
@@ -641,7 +676,6 @@ class RenderPresets:
     @classmethod
     def _presets_folder_path(cls, context):
         # Return full path to presets folder
-        presets_dir = None
         if context.preferences.addons[__package__].preferences.presets_dir:
             presets_dir = RenderPresetsFileSystem.abs_path(
                 path=context.preferences.addons[__package__].preferences.presets_dir

@@ -597,14 +597,20 @@ class RenderPresets:
                         print('ERR: unknown complex attribute')
                 else:
                     # simple attribute
+                    #
+                    # commented because since 2.91.2 "context.scene.render.engine" property has no 'CYCLES' in bl_rna
+                    #    bpy.context.scene.render.bl_rna.properties['engine'].enum_items[:] -> ['BLENDER_EEVEE']
+                    #
                     # if enum - check existing in the property enum-list (ex: error if try to set '' to studio_light enum property, but get '' from studio_light in wireframe mode)
-                    if hasattr(attribute_instance, 'bl_rna') \
-                            and isinstance(attribute_instance.bl_rna.properties[attribute_name], EnumProperty):
-                        enums = [item.identifier for item in attribute_instance.bl_rna.properties[attribute_name].enum_items]
-                        if attribute in enums:
-                            setattr(attribute_instance, attribute_name, attribute)
-                    else:
-                        setattr(attribute_instance, attribute_name, attribute)
+                    # if hasattr(attribute_instance, 'bl_rna') \
+                    #         and isinstance(attribute_instance.bl_rna.properties[attribute_name], EnumProperty):
+                    #     enums = [item.identifier for item in attribute_instance.bl_rna.properties[attribute_name].enum_items]
+                    #     if attribute in enums:
+                    #         setattr(attribute_instance, attribute_name, attribute)
+                    # else:
+                    #     setattr(attribute_instance, attribute_name, attribute)
+
+                    setattr(attribute_instance, attribute_name, attribute)
         except Exception as exception:
             print('ERR: ', exception)
             # print('\t ', 'attribute = ', attribute, ', attribute_text = ', attribute_text, ', attribute_instance = ', attribute_instance)

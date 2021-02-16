@@ -25,7 +25,7 @@ Settings templates are saved as separate files, making them easy to backup and t
 
 Current add-on version:
 -
-1.1.4.
+1.1.5.
 
 Blender versions:
 -
@@ -43,6 +43,9 @@ The "Preferences" window — Add-ons — Install... — specify the downloaded a
 
 Version history:
 -
+1.1.5.
+- some fixing in processing Enum attributes
+
 1.1.4.
 - some improvements in working with attributes
 

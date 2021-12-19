@@ -3,7 +3,7 @@ Blender add-on for saving render and viewport settings to presets and quickly sw
 
 <img src="https://b3d.interplanety.org/wp-content/upload_content/2020/02/preview_670x335-400x200.jpg"><p>
 
-Some times it is necessary to have several settings for several final renders, for example, a small preview, a technical render with the metadata output on the image, a "gypsum" render, etc. Each time, manually resizing, changing sampling, marking or unchecking the necessary render settings checkboxes is tedious. The "B-Presets" add-on allows you to save the current render settings into a preset, and then switch between saved presets with a single mouse click. Also, the add-on allows you to save and quickly switch between viewport settings.
+Sometimes it is necessary to have several settings for several final renders, for example, a small preview, a technical render with the metadata output on the image, a "gypsum" render, etc. Each time, manually resizing, changing sampling, marking or unchecking the necessary render settings checkboxes is tedious. The "B-Presets" add-on allows you to save the current render settings into a preset, and then switch between saved presets with a single mouse click. Also, the add-on allows you to save and quickly switch between viewport settings.
 
 Add-on functionality:
 -
@@ -25,11 +25,11 @@ Settings templates are saved as separate files, making them easy to backup and t
 
 Current add-on version:
 -
-1.1.5.
+1.1.6.
 
 Blender versions:
 -
-2.83, 2.90, 2.91
+2.83, 2.90, 2.91, 2.92, 2.93, 3.0
 
 Location and call:
 -
@@ -43,7 +43,10 @@ The "Preferences" window — Add-ons — Install... — specify the downloaded a
 
 Version history:
 -
-1.1.5.
+1.1.6.
+- fixing issue with camera settings after ctrl+z
+
+- 1.1.5.
 - some fixing in processing Enum attributes
 
 1.1.4.

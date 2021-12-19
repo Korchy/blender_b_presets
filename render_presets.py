@@ -61,7 +61,10 @@ class RenderPresets:
         # Remove active preset
         if not preset.locked:
             # remove file
-            file_path = os.path.join(cls._presets_folder_path(context=context), preset.name + '.' + cls._preset_file_ext)
+            file_path = os.path.join(
+                cls._presets_folder_path(context=context),
+                preset.name + '.' + cls._preset_file_ext
+            )
             if os.path.isfile(path=file_path):
                 os.remove(path=file_path)
             # remove item in list
@@ -108,12 +111,15 @@ class RenderPresets:
             render_property=context.scene,
             render_property_txt='context.scene',
             excluded_attributes=(
-                'rna_type', 'active_clip', 'animation_data', 'background_set', 'camera', 'collection', 'cursor', 'cycles', 'cycles_curves',
-                'display', 'display_settings', 'eevee', 'frame_current_final', 'grease_pencil', 'grease_pencil_settings', 'is_embedded_data',
-                'is_evaluated', 'is_library_indirect',
-                'is_nla_tweakmode', 'keying_sets', 'keying_sets_all', 'library', 'name', 'name_full', 'node_tree', 'objects', 'original',
-                'override_library', 'preview', 'render', 'rigidbody_world', 'safe_areas', 'sequence_editor', 'sequencer_colorspace_settings',
-                'timeline_markers', 'tool_settings', 'transform_orientation_slots', 'unit_settings', 'users', 'view_layers', 'view_settings',
+                'rna_type', 'active_clip', 'animation_data', 'asset_data', 'background_set', 'camera',
+                'collection', 'cursor', 'cycles', 'cycles_curves', 'display', 'display_settings',
+                'eevee', 'frame_current_final', 'grease_pencil', 'grease_pencil_settings',
+                'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'is_nla_tweakmode',
+                'keying_sets', 'keying_sets_all', 'library', 'library_weak_reference', 'name',
+                'name_full', 'node_tree', 'objects', 'original', 'override_library', 'preview',
+                'render', 'rigidbody_world', 'safe_areas', 'sequence_editor',
+                'sequencer_colorspace_settings', 'timeline_markers', 'tool_settings',
+                'transform_orientation_slots', 'unit_settings', 'users', 'view_layers', 'view_settings',
                 'world'
             ),
             preset_data=preset_data
@@ -124,8 +130,9 @@ class RenderPresets:
             render_property=context.scene.render,
             render_property_txt='context.scene.render',
             excluded_attributes=(
-                'rna_type', 'bake', 'ffmpeg', 'file_extension', 'has_multiple_engines', 'image_settings', 'is_movie_format',
-                'motion_blur_shutter_curve', 'stereo_views', 'use_spherical_stereo', 'views'
+                'rna_type', 'bake', 'ffmpeg', 'file_extension', 'has_multiple_engines',
+                'image_settings', 'is_movie_format', 'motion_blur_shutter_curve', 'stereo_views',
+                'use_spherical_stereo', 'views'
             ),
             preset_data=preset_data
         )
@@ -311,8 +318,10 @@ class RenderPresets:
             render_property=context.scene.world,
             render_property_txt='context.scene.world',
             excluded_attributes=(
-                'rna_type', 'animation_data', 'cycles', 'cycles_visibility', 'is_embedded_data', 'is_evaluated', 'is_library_indirect',
-                'library', 'light_settings', 'mist_settings', 'name_full', 'node_tree', 'original', 'override_library', 'preview', 'users'
+                'rna_type', 'animation_data', 'asset_data', 'cycles', 'cycles_visibility',
+                'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'library',
+                'library_weak_reference', 'light_settings', 'mist_settings', 'name_full',
+                'node_tree', 'original', 'override_library', 'preview', 'users'
             ),
             preset_data=preset_data
         )
@@ -373,8 +382,9 @@ class RenderPresets:
             render_property=context.space_data,
             render_property_txt='context.space_data',
             excluded_attributes=(
-                'rna_type', 'camera', 'icon_from_show_object_viewport', 'local_view', 'lock_object', 'overlay', 'region_3d', 'region_quadviews',
-                'shading', 'show_region_ui', 'stereo_3d_eye', 'type'
+                'rna_type', 'camera', 'icon_from_show_object_viewport', 'local_view',
+                'lock_object', 'overlay', 'region_3d', 'region_quadviews', 'shading',
+                'show_locked_time', 'show_region_ui', 'stereo_3d_eye', 'type'
             ),
             preset_data=preset_data
         )
@@ -410,7 +420,8 @@ class RenderPresets:
                 render_property=context.view_layer,
                 render_property_txt='context.view_layer',
                 excluded_attributes=(
-                    'rna_type', 'active_layer_collection', 'cycles', 'depsgraph', 'eevee', 'freestyle_settings', 'layer_collection',
+                    'rna_type', 'active_aov', 'active_layer_collection', 'aovs', 'cycles',
+                    'depsgraph', 'eevee', 'freestyle_settings', 'layer_collection',
                     'material_override', 'name', 'objects'
                 ),
                 preset_data=preset_data
@@ -466,20 +477,50 @@ class RenderPresets:
         for attribute in attributes:
             try:
                 if isinstance(getattr(render_property, attribute), CurveMapping):
-                    cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='CurveMapping')
+                    cls._add_attribute_to_preset_data(
+                        attribute=render_property_txt + '.' + attribute,
+                        context=context,
+                        preset_data=preset_data,
+                        attribute_type='CurveMapping'
+                    )
                 elif render_property.is_property_readonly(attribute):
-                    print(render_property, attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'READ_ONLY')
+                    print(
+                        render_property,
+                        attribute,
+                        ' (', type(getattr(render_property, attribute)), ') ', ': ',
+                        getattr(render_property, attribute),
+                        'READ_ONLY'
+                    )
                 elif isinstance(getattr(render_property, attribute), bpy_prop_array):
-                    cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='bpy_prop_array')
+                    cls._add_attribute_to_preset_data(
+                        attribute=render_property_txt + '.' + attribute,
+                        context=context,
+                        preset_data=preset_data,
+                        attribute_type='bpy_prop_array'
+                    )
                 elif isinstance(getattr(render_property, attribute), (Vector, Color)):
-                    cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='Vector')
+                    cls._add_attribute_to_preset_data(
+                        attribute=render_property_txt + '.' + attribute,
+                        context=context,
+                        preset_data=preset_data,
+                        attribute_type='Vector'
+                    )
                 # elif isinstance(getattr(render_property, attribute), set):
                 #     print('set: ', attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'SET')
                 #     cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='set')
                 elif not isinstance(getattr(render_property, attribute), (int, float, bool, str, set)):
-                    print(attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'COMPLEX TYPE')
+                    print(
+                        attribute,
+                        ' (', type(getattr(render_property, attribute)), ') ', ': ',
+                        getattr(render_property, attribute),
+                        'COMPLEX TYPE'
+                    )
                 else:
-                    cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data)
+                    cls._add_attribute_to_preset_data(
+                        attribute=render_property_txt + '.' + attribute,
+                        context=context,
+                        preset_data=preset_data
+                    )
             except Exception as exception:
                 print('ERR: ', exception)
 
@@ -496,10 +537,11 @@ class RenderPresets:
                 object_name=preset_data['camera_name']
             )
         else:
-            context.scene.camera = cls._camera_backup
+            cls._restore_camera(context=context)
         # attributes
         # preordered attributes (mast be loaded first because some other attributes depends on them)
-        # globally first - this attributes influence on attributes from other data sections (image_settings.file_format - ffmpeg section)
+        # globally first - this attributes influence on attributes from other data sections
+        # (image_settings.file_format - ffmpeg section)
         preordered_attributes = [
             'context.scene.render.image_settings.file_format'
         ]
@@ -542,7 +584,7 @@ class RenderPresets:
         # backup current preset data
         if not cls._scene_backup:
             cls._scene_backup = cls.preset_data_from_scene(context=context)
-            cls._camera_backup = context.scene.camera
+            cls._backup_camera(context=context)
 
     @classmethod
     def restore_scene(cls, context):
@@ -552,7 +594,20 @@ class RenderPresets:
                 context=context,
                 preset_data=cls._scene_backup
             )
-            context.scene.camera = cls._camera_backup
+            cls._restore_camera(context=context)
+
+    @classmethod
+    def _backup_camera(cls, context):
+        # backup active scene camera
+        cls._camera_backup = context.scene.camera.name
+
+    @classmethod
+    def _restore_camera(cls, context):
+        # restore acitve scene camera from backup
+        if cls._camera_backup \
+                and cls._camera_backup in context.blend_data.objects and \
+                context.blend_data.objects[cls._camera_backup].type == 'CAMERA':
+            context.scene.camera = context.blend_data.objects[cls._camera_backup]
 
     @classmethod
     def clear_presets_list(cls, context):
@@ -601,10 +656,15 @@ class RenderPresets:
                     # commented because since 2.91.2 "context.scene.render.engine" property has no 'CYCLES' in bl_rna
                     #    bpy.context.scene.render.bl_rna.properties['engine'].enum_items[:] -> ['BLENDER_EEVEE']
                     #
-                    # if enum - check existing in the property enum-list (ex: error if try to set '' to studio_light enum property, but get '' from studio_light in wireframe mode)
+                    # if enum - check existing in the property enum-list
+                    # (ex: error if try to set '' to studio_light enum property,
+                    # but get '' from studio_light in wireframe mode)
                     # if hasattr(attribute_instance, 'bl_rna') \
                     #         and isinstance(attribute_instance.bl_rna.properties[attribute_name], EnumProperty):
-                    #     enums = [item.identifier for item in attribute_instance.bl_rna.properties[attribute_name].enum_items]
+                    #     enums = [
+                    #         item.identifier for item
+                    #         in attribute_instance.bl_rna.properties[attribute_name].enum_items
+                    #     ]
                     #     if attribute in enums:
                     #         setattr(attribute_instance, attribute_name, attribute)
                     # else:
@@ -613,14 +673,21 @@ class RenderPresets:
                     setattr(attribute_instance, attribute_name, attribute)
         except Exception as exception:
             print('ERR: ', exception)
-            # print('\t ', 'attribute = ', attribute, ', attribute_text = ', attribute_text, ', attribute_instance = ', attribute_instance)
+            print('\t ', 'attribute = ', attribute, ', attribute_text = ',
+                  attribute_text, ', attribute_instance = ', attribute_instance)
 
     @classmethod
     def change_preset_name(cls, context, preset_item):
         # changes preset name
-        old_file_path = os.path.join(cls._presets_folder_path(context=context), preset_item.name_old + '.' + cls._preset_file_ext)
+        old_file_path = os.path.join(
+            cls._presets_folder_path(context=context),
+            preset_item.name_old + '.' + cls._preset_file_ext
+        )
         if os.path.isfile(old_file_path):
-            new_file_path = os.path.join(cls._presets_folder_path(context=context), preset_item.name + '.' + cls._preset_file_ext)
+            new_file_path = os.path.join(
+                cls._presets_folder_path(context=context),
+                preset_item.name + '.' + cls._preset_file_ext
+            )
             os.rename(old_file_path, new_file_path)
 
     @classmethod
@@ -676,7 +743,8 @@ class RenderPresets:
     def _presets_files(cls, context):
         # generator to get preset files in presets folder
         for file in sorted(os.listdir(cls._presets_folder_path(context=context))):
-            if os.path.isfile(os.path.join(cls._presets_folder_path(context=context), file)) and file.endswith('.' + cls._preset_file_ext):
+            if os.path.isfile(os.path.join(cls._presets_folder_path(context=context), file)) \
+                    and file.endswith('.' + cls._preset_file_ext):
                 yield file
 
     @classmethod

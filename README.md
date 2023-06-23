@@ -25,11 +25,11 @@ Settings templates are saved as separate files, making them easy to backup and t
 
 Current add-on version:
 -
-1.1.6.
+1.1.7.
 
 Blender versions:
 -
-2.83, 2.90, 2.91, 2.92, 2.93, 3.0
+2.83, 2.90, 2.91, 2.92, 2.93, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
 
 Location and call:
 -
@@ -43,6 +43,10 @@ The "Preferences" window — Add-ons — Install... — specify the downloaded a
 
 Version history:
 -
+1.1.7.
+- updating for Blender 3.5 compatibility    
+- fixing issues with some external add-ons
+
 1.1.6.
 - fixing issue with camera settings after ctrl+z
 

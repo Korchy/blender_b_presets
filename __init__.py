@@ -20,7 +20,7 @@ bl_info = {
     'name': 'b_presets',
     'category': 'All',
     'author': 'Akimov Nikita',
-    'version': (1, 1, 6),
+    'version': (1, 1, 7),
     'blender': (2, 83, 0),
     'location': 'N-Panel > B-Presets',
     'wiki_url': 'https://b3d.interplanety.org/en/blender-add-on-b-presets/',
@@ -46,12 +46,18 @@ def register():
         render_presets_ops.register()
         render_presets_panel.register()
         # load presets list
-        bpy.app.timers.register(functools.partial(render_presets_load_presets_list, bpy.context, None), first_interval=0.25)
+        bpy.app.timers.register(
+            functools.partial(render_presets_load_presets_list, bpy.context, None),
+            first_interval=0.25
+        )
         # reload presets list with scene load
         if render_presets_load_presets_list not in bpy.app.handlers.load_post:
             bpy.app.handlers.load_post.append(render_presets_load_presets_list)
     else:
-        print('It seems you are trying to use the dev version of the ' + bl_info['name'] + ' add-on. It may work not properly. Please download and use the release version!')
+        print(
+            'It seems you are trying to use the dev version of the '
+            + bl_info['name'] + ' add-on. It may work not properly. Please download and use the release version!'
+        )
 
 
 def unregister():

@@ -82,6 +82,22 @@ class BLVector(BLBaseType):
         return instance
 
 
+class BLSet(BLBaseType):
+    # set as separate type because json doesn't serialize "set" type
+
+    @classmethod
+    def _instance_to_json(cls, instance):
+        # data to json
+        json = list(instance)
+        return json
+
+    @classmethod
+    def _json_to_instance(cls, instance, json):
+        # data from json
+        instance = set(json)
+        return instance
+
+
 class BLCurveMapping(BLBaseType):
 
     @classmethod
@@ -144,7 +160,9 @@ class BLCurveMap(BLBaseType):
         for i, point in enumerate(json['points']):
             if len(instance.points) <= i:
                 if 'instance' in point:
-                    instance.points.new(point['instance']['location']['instance']['x'], point['instance']['location']['instance']['y'])
+                    instance.points.new(
+                        point['instance']['location']['instance']['x'], point['instance']['location']['instance']['y']
+                    )
                 else:   # older compatibility (was [...] now {class: xx, instance={...}})
                     instance.points.new(point['location'][0], point['location'][0])
             BLCurveMapPoint.from_json(instance.points[i], point)

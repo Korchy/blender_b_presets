@@ -8,7 +8,7 @@ import json
 import os
 from mathutils import Vector, Color
 from bpy.types import bpy_prop_array, CurveMapping, EnumProperty
-from .render_presets_bl_types_conversion import BLCurveMapping
+from .render_presets_bl_types_conversion import BLCurveMapping, BLSet
 from .render_presets_file_system import RenderPresetsFileSystem
 
 
@@ -114,7 +114,7 @@ class RenderPresets:
                 'rna_type', 'active_clip', 'animation_data', 'asset_data', 'background_set', 'camera',
                 'collection', 'cursor', 'cycles', 'cycles_curves', 'display', 'display_settings',
                 'eevee', 'frame_current_final', 'grease_pencil', 'grease_pencil_settings',
-                'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'is_nla_tweakmode',
+                'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'is_missing', 'is_nla_tweakmode',
                 'keying_sets', 'keying_sets_all', 'library', 'library_weak_reference', 'name',
                 'name_full', 'node_tree', 'objects', 'original', 'override_library', 'preview',
                 'render', 'rigidbody_world', 'safe_areas', 'sequence_editor',
@@ -162,13 +162,25 @@ class RenderPresets:
             render_property=context.scene.render.image_settings,
             render_property_txt='context.scene.render.image_settings',
             excluded_attributes=(
-                'rna_type', 'display_settings', 'stereo_3d_format', 'view_settings'
+                'display_settings', 'has_linear_colorspace', 'linear_colorspace_settings', 'rna_type',
+                'stereo_3d_format', 'view_settings'
             ),
             preset_data=preset_data,
             first_attributes=[
                 'file_format'
             ]
         )
+        # context.scene.render.image_settings.linear_colorspace_settings
+        if hasattr(context.scene.render.image_settings, 'linear_colorspace_settings'):
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.scene.render.image_settings.linear_colorspace_settings,
+                render_property_txt='context.scene.render.image_settings.linear_colorspace_settings',
+                excluded_attributes=(
+                    'rna_type'
+                ),
+                preset_data=preset_data
+            )
         # context.scene.render.image_settings.view_settings
         cls._add_attributes_to_preset_data(
             context=context,
@@ -195,10 +207,22 @@ class RenderPresets:
             render_property=context.scene.render.bake.image_settings,
             render_property_txt='context.scene.render.bake.image_settings',
             excluded_attributes=(
-                'rna_type', 'display_settings', 'stereo_3d_format', 'view_settings'
+                'display_settings', 'has_linear_colorspace', 'rna_type', 'linear_colorspace_settings',
+                'stereo_3d_format', 'view_settings'
             ),
             preset_data=preset_data
         )
+        # context.scene.render.bake.image_settings.linear_colorspace_settings
+        if hasattr(context.scene.render.bake.image_settings, 'linear_colorspace_settings'):
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.scene.render.bake.image_settings.linear_colorspace_settings,
+                render_property_txt='context.scene.render.bake.image_settings.linear_colorspace_settings',
+                excluded_attributes=(
+                    'rna_type'
+                ),
+                preset_data=preset_data
+            )
         # context.scene.render.bake.image_settings.view_settings
         cls._add_attributes_to_preset_data(
             context=context,
@@ -313,58 +337,59 @@ class RenderPresets:
             preset_data=preset_data
         )
         # context.scene.world
-        cls._add_attributes_to_preset_data(
-            context=context,
-            render_property=context.scene.world,
-            render_property_txt='context.scene.world',
-            excluded_attributes=(
-                'rna_type', 'animation_data', 'asset_data', 'cycles', 'cycles_visibility',
-                'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'library',
-                'library_weak_reference', 'light_settings', 'mist_settings', 'name_full',
-                'node_tree', 'original', 'override_library', 'preview', 'users'
-            ),
-            preset_data=preset_data
-        )
-        # context.scene.world.cycles
-        cls._add_attributes_to_preset_data(
-            context=context,
-            render_property=context.scene.world.cycles,
-            render_property_txt='context.scene.world.cycles',
-            excluded_attributes=(
-                'rna_type', 'animation_data', 'cycles'
-            ),
-            preset_data=preset_data
-        )
-        # context.scene.world.cycles_visibility
-        cls._add_attributes_to_preset_data(
-            context=context,
-            render_property=context.scene.world.cycles_visibility,
-            render_property_txt='context.scene.world.cycles_visibility',
-            excluded_attributes=(
-                'rna_type'
-            ),
-            preset_data=preset_data
-        )
-        # context.scene.world.light_settings
-        cls._add_attributes_to_preset_data(
-            context=context,
-            render_property=context.scene.world.light_settings,
-            render_property_txt='context.scene.world.light_settings',
-            excluded_attributes=(
-                'rna_type'
-            ),
-            preset_data=preset_data
-        )
-        # context.scene.world.mist_settings
-        cls._add_attributes_to_preset_data(
-            context=context,
-            render_property=context.scene.world.mist_settings,
-            render_property_txt='context.scene.world.mist_settings',
-            excluded_attributes=(
-                'rna_type'
-            ),
-            preset_data=preset_data
-        )
+        if context.scene.world:
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.scene.world,
+                render_property_txt='context.scene.world',
+                excluded_attributes=(
+                    'rna_type', 'animation_data', 'asset_data', 'cycles', 'cycles_visibility',
+                    'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'is_missing', 'library',
+                    'library_weak_reference', 'light_settings', 'mist_settings', 'name_full',
+                    'node_tree', 'original', 'override_library', 'preview', 'users'
+                ),
+                preset_data=preset_data
+            )
+            # context.scene.world.cycles
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.scene.world.cycles,
+                render_property_txt='context.scene.world.cycles',
+                excluded_attributes=(
+                    'rna_type', 'animation_data', 'cycles'
+                ),
+                preset_data=preset_data
+            )
+            # context.scene.world.cycles_visibility
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.scene.world.cycles_visibility,
+                render_property_txt='context.scene.world.cycles_visibility',
+                excluded_attributes=(
+                    'rna_type'
+                ),
+                preset_data=preset_data
+            )
+            # context.scene.world.light_settings
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.scene.world.light_settings,
+                render_property_txt='context.scene.world.light_settings',
+                excluded_attributes=(
+                    'rna_type'
+                ),
+                preset_data=preset_data
+            )
+            # context.scene.world.mist_settings
+            cls._add_attributes_to_preset_data(
+                context=context,
+                render_property=context.scene.world.mist_settings,
+                render_property_txt='context.scene.world.mist_settings',
+                excluded_attributes=(
+                    'rna_type'
+                ),
+                preset_data=preset_data
+            )
         # context.scene.grease_pencil_settings
         cls._add_attributes_to_preset_data(
             context=context,
@@ -420,9 +445,9 @@ class RenderPresets:
                 render_property=context.view_layer,
                 render_property_txt='context.view_layer',
                 excluded_attributes=(
-                    'rna_type', 'active_aov', 'active_layer_collection', 'aovs', 'cycles',
-                    'depsgraph', 'eevee', 'freestyle_settings', 'layer_collection',
-                    'material_override', 'name', 'objects'
+                    'active_aov', 'active_layer_collection', 'active_lightgroup',
+                    'aovs', 'cycles', 'depsgraph', 'eevee', 'freestyle_settings', 'layer_collection',
+                    'lightgroups', 'material_override', 'name', 'objects', 'rna_type'
                 ),
                 preset_data=preset_data
             )
@@ -451,7 +476,8 @@ class RenderPresets:
         return preset_data
 
     @classmethod
-    def _add_attributes_to_preset_data(cls, context, render_property, render_property_txt, excluded_attributes, preset_data, first_attributes=None):
+    def _add_attributes_to_preset_data(cls, context, render_property, render_property_txt,
+                                       excluded_attributes, preset_data, first_attributes=None):
         # add render property attributes to preset data
         first_attributes = [] if first_attributes is None else first_attributes
         # some attributes need to be processed first because other attributes depends on them
@@ -483,10 +509,11 @@ class RenderPresets:
                         preset_data=preset_data,
                         attribute_type='CurveMapping'
                     )
-                elif render_property.is_property_readonly(attribute):
+                elif hasattr(render_property, 'is_property_readonly') \
+                        and render_property.is_property_readonly(attribute):
                     print(
                         render_property,
-                        attribute,
+                        attribute + ' (' + render_property_txt + '.' + attribute + ')',
                         ' (', type(getattr(render_property, attribute)), ') ', ': ',
                         getattr(render_property, attribute),
                         'READ_ONLY'
@@ -505,9 +532,16 @@ class RenderPresets:
                         preset_data=preset_data,
                         attribute_type='Vector'
                     )
-                # elif isinstance(getattr(render_property, attribute), set):
-                #     print('set: ', attribute, ' (', type(getattr(render_property, attribute)), ') ', ': ', getattr(render_property, attribute), 'SET')
-                #     cls._add_attribute_to_preset_data(attribute=render_property_txt + '.' + attribute, context=context, preset_data=preset_data, attribute_type='set')
+                elif isinstance(getattr(render_property, attribute), set):
+                    # set as separate type because json doesn't serialize "set" type
+                    # print('set: ', attribute, ' (', type(getattr(render_property, attribute)), ') ',
+                    #       ': ', getattr(render_property, attribute), 'SET')
+                    cls._add_attribute_to_preset_data(
+                        attribute=render_property_txt + '.' + attribute,
+                        context=context,
+                        preset_data=preset_data,
+                        attribute_type='BLSet'
+                    )
                 elif not isinstance(getattr(render_property, attribute), (int, float, bool, str, set)):
                     print(
                         attribute,
@@ -629,6 +663,10 @@ class RenderPresets:
                 attribute_value = tuple(getattr(eval(attribute_instance), attribute_name))
             elif attribute_type == 'CurveMapping':
                 attribute_value = BLCurveMapping.to_json(instance=getattr(eval(attribute_instance), attribute_name))
+            elif attribute_type == 'BLSet':
+                # set as separate type because json doesn't serialize "set" type
+                attribute_value = BLSet.to_json(
+                    instance=getattr(eval(attribute_instance), attribute_name))
             else:
                 attribute_value = getattr(eval(attribute_instance), attribute_name)
             preset_data['attributes'][attribute] = attribute_value
@@ -645,6 +683,12 @@ class RenderPresets:
                     # complex attribute
                     if attribute['class'] == 'CurveMapping':
                         BLCurveMapping.from_json(
+                            instance=eval(attribute_text),
+                            json=attribute
+                        )
+                    elif attribute['class'] == 'set':
+                        # set as separate type because json doesn't serialize "set" type
+                        BLSet.from_json(
                             instance=eval(attribute_text),
                             json=attribute
                         )

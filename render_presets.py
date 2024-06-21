@@ -111,17 +111,25 @@ class RenderPresets:
             render_property=context.scene,
             render_property_txt='context.scene',
             excluded_attributes=(
-                'rna_type', 'active_clip', 'animation_data', 'asset_data', 'background_set', 'camera',
+                'active_clip', 'animation_data', 'asset_data', 'background_set', 'camera',
                 'collection', 'cursor', 'cycles', 'cycles_curves', 'display', 'display_settings',
-                'eevee', 'frame_current_final', 'grease_pencil', 'grease_pencil_settings',
-                'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'is_missing', 'is_nla_tweakmode',
-                'keying_sets', 'keying_sets_all', 'library', 'library_weak_reference', 'name',
+                'eevee', 'frame_current_final', 'grease_pencil', 'grease_pencil_settings', 'hydra',
+                'id_type', 'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'is_missing',
+                'is_nla_tweakmode', 'keying_sets', 'keying_sets_all', 'library', 'library_weak_reference', 'name',
                 'name_full', 'node_tree', 'objects', 'original', 'override_library', 'preview',
-                'render', 'rigidbody_world', 'safe_areas', 'sequence_editor',
-                'sequencer_colorspace_settings', 'timeline_markers', 'tool_settings',
+                'render', 'rigidbody_world', 'rna_type', 'safe_areas', 'sequence_editor',
+                'sequencer_colorspace_settings', 'session_uid', 'timeline_markers', 'tool_settings',
                 'transform_orientation_slots', 'unit_settings', 'users', 'view_layers', 'view_settings',
                 'world'
             ),
+            preset_data=preset_data
+        )
+        # context.scene.hydra
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.hydra,
+            render_property_txt='context.scene.hydra',
+            excluded_attributes=('rna_type', ),
             preset_data=preset_data
         )
         # context.scene.render
@@ -312,7 +320,17 @@ class RenderPresets:
             render_property=context.scene.eevee,
             render_property_txt='context.scene.eevee',
             excluded_attributes=(
-                'rna_type', 'gi_cache_info'
+                'gi_cache_info', 'rna_type', 'ray_tracing_options'
+            ),
+            preset_data=preset_data
+        )
+        # context.scene.eevee.ray_tracing_options
+        cls._add_attributes_to_preset_data(
+            context=context,
+            render_property=context.scene.eevee.ray_tracing_options,
+            render_property_txt='context.scene.eevee.ray_tracing_options',
+            excluded_attributes=(
+                'rna_type'
             ),
             preset_data=preset_data
         )
@@ -343,10 +361,10 @@ class RenderPresets:
                 render_property=context.scene.world,
                 render_property_txt='context.scene.world',
                 excluded_attributes=(
-                    'rna_type', 'animation_data', 'asset_data', 'cycles', 'cycles_visibility',
+                    'animation_data', 'asset_data', 'cycles', 'cycles_visibility', 'id_type',
                     'is_embedded_data', 'is_evaluated', 'is_library_indirect', 'is_missing', 'library',
                     'library_weak_reference', 'light_settings', 'mist_settings', 'name_full',
-                    'node_tree', 'original', 'override_library', 'preview', 'users'
+                    'node_tree', 'original', 'override_library', 'preview', 'rna_type', 'session_uid', 'users'
                 ),
                 preset_data=preset_data
             )

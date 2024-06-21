@@ -25,11 +25,11 @@ Settings templates are saved as separate files, making them easy to backup and t
 
 Current add-on version:
 -
-1.1.7.
+1.1.8.
 
 Blender versions:
 -
-2.83, 2.90, 2.91, 2.92, 2.93, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
+2.83, 2.90, 2.91, 2.92, 2.93, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 4.0, 4.1
 
 Location and call:
 -
@@ -43,6 +43,9 @@ The "Preferences" window — Add-ons — Install... — specify the downloaded a
 
 Version history:
 -
+1.1.8.
+- updating for Blender 4.1 compatibility    
+
 1.1.7.
 - updating for Blender 3.5 compatibility    
 - fixing issues with some external add-ons
@@ -70,7 +73,6 @@ Version history:
 - excluded the name of the Scene
 - added active view_layer settings (optional)
 - added saving curves from Color management
-
 
 1.0.0.
 - This release.

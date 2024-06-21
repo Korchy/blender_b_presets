@@ -20,7 +20,7 @@ bl_info = {
     'name': 'b_presets',
     'category': 'All',
     'author': 'Akimov Nikita',
-    'version': (1, 1, 7),
+    'version': (1, 1, 8),
     'blender': (2, 83, 0),
     'location': 'N-Panel > B-Presets',
     'wiki_url': 'https://b3d.interplanety.org/en/blender-add-on-b-presets/',
